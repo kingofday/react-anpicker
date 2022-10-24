@@ -1,0 +1,107 @@
+.anpicker {
+    --blue: #448aff;
+    --blueHover: #3d7ce5;
+    --text: #323e54;
+    --bg: #fff;
+    --disabledBg: #f0f3fa;
+    --fs12: 12px;
+    --btnSize: 34px;
+    position: relative;
+    color: var(--text);
+    font-size: var(--fs12);
+    @mixin btn {
+        background-color: transparent;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+        border-radius: 6px;
+        width: var(--btnSize);
+        height: var(--btnSize);
+    }
+    button {
+        @include btn;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        td {
+            text-align: center;
+        }
+    }
+    input {
+        direction: ltr;
+        text-align: left;
+    }
+    .popup {
+        .main {
+            position: absolute;
+            background-color: var(--bg);
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+            min-width: 234px;
+            border-radius: 6px;
+            .selector-heading {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 7px;
+                svg {
+                    path {
+                        stroke: var(--text);
+                    }
+                }
+                .monthes,
+                .years {
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
+                    a {
+                        @include btn;
+                    }
+                }
+            }
+            .days {
+                .week {
+                    background-color: var(--disabledBg);
+                    font-size: var(--fs12);
+                    border-radius: 6px;
+                    th {
+                        span {
+                            width: 34px;
+                            height: 34px;
+                            display: inline-flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+                    }
+                }
+                .day {
+                    button {
+                        width: var(--btnSize);
+                        height: var(--btnSize);
+                    }
+                    &.selected {
+                        button {
+                            background-color: var(--blue);
+                            color: var(--bg);
+                        }
+                    }
+                    &.current {
+                        button {
+                            border-bottom: solid 2px var(--blue);
+                        }
+                    }
+                }
+            }
+            .years {
+                border-radius: 6px;
+                td {
+                    button {
+                    }
+                }
+            }
+        }
+    }
+}
