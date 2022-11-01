@@ -31,6 +31,7 @@ import { AnPicker } from 'react-anpicker';
 - **value:** :Date | null- initital value
 - **onChange:** :(date: Date | null, localDate: string | null) => void- a function that fires after change and gives you eq date and local date
 - **showTodayBottom:** :boolean- today button be visible or not
+- **inputControl:** :ReactElemt- for passing an custom input from other libraries
 - **locale:** :
 {
     name: string;
