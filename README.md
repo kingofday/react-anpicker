@@ -25,7 +25,7 @@ import { AnPicker } from 'react-anpicker';
     const handleChange = (date: Date | null, locale: string | null) => { }
     <AnPicker value={date} onChange={handleChange} />
 ...
-
+```
 #### Props
 - **defaultOpen:** :boolean- picker be visible at first or not
 - **value:** :Date | null- initital value
