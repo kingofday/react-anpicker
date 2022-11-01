@@ -1,7 +1,8 @@
-import { Day, Locale } from "./models";
+import Locale from "./Models/Locale";
+import Day from "./Models/Day";
 
 export const getYear = (dt: Date, locale: string) => new Intl.DateTimeFormat(locale, { year: 'numeric' }).format(dt);
-export const getMonth = (dt: Date, locale: string) => new Intl.DateTimeFormat(locale, { month: 'short' }).format(dt);
+export const getMonthName = (dt: Date | [number, number, number], locale: string) => new Intl.DateTimeFormat(locale, { month: 'short' }).format(dt instanceof Date ? dt : new Date(`${dt[0]}/${dt[1]}/${dt[2]}`));
 export const nameOfWeekDays = (locale: Locale): string[] => {
     let days: number[] = [];
     const format = new Intl.DateTimeFormat(locale.name, { weekday: "short" }).format;
@@ -76,7 +77,7 @@ export function dateComparer(dt1?: Date, dt2?: Date | [number, number, number]):
         return dt1 !== null && dt2 !== null && dt1?.getFullYear() === dt2?.getFullYear() && dt1?.getMonth() === dt2?.getMonth() && dt1?.getDate() === dt2?.getDate();
     else {
         let arr = dt2 as [number, number, number];
-        return dt1 !== null && dt2 !== null && dt1?.getFullYear() === arr[0] && dt1?.getMonth() === arr[1] && dt1?.getDate() === arr[2];
+        return dt1 !== null && dt2 !== null && dt1?.getFullYear() === arr[0] && dt1?.getMonth() + 1 === arr[1] && dt1?.getDate() === arr[2];
     }
 }
 export const convertToLocalDate = (date: Date, locale: Locale): [number, number, number] => {

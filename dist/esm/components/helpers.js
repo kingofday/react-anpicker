@@ -1,5 +1,5 @@
 export var getYear = function (dt, locale) { return new Intl.DateTimeFormat(locale, { year: 'numeric' }).format(dt); };
-export var getMonth = function (dt, locale) { return new Intl.DateTimeFormat(locale, { month: 'short' }).format(dt); };
+export var getMonthName = function (dt, locale) { return new Intl.DateTimeFormat(locale, { month: 'short' }).format(dt instanceof Date ? dt : new Date("".concat(dt[0], "/").concat(dt[1], "/").concat(dt[2]))); };
 export var nameOfWeekDays = function (locale) {
     var days = [];
     var format = new Intl.DateTimeFormat(locale.name, { weekday: "short" }).format;
@@ -77,60 +77,9 @@ export function dateComparer(dt1, dt2) {
         return dt1 !== null && dt2 !== null && (dt1 === null || dt1 === void 0 ? void 0 : dt1.getFullYear()) === (dt2 === null || dt2 === void 0 ? void 0 : dt2.getFullYear()) && (dt1 === null || dt1 === void 0 ? void 0 : dt1.getMonth()) === (dt2 === null || dt2 === void 0 ? void 0 : dt2.getMonth()) && (dt1 === null || dt1 === void 0 ? void 0 : dt1.getDate()) === (dt2 === null || dt2 === void 0 ? void 0 : dt2.getDate());
     else {
         var arr = dt2;
-        return dt1 !== null && dt2 !== null && (dt1 === null || dt1 === void 0 ? void 0 : dt1.getFullYear()) === arr[0] && (dt1 === null || dt1 === void 0 ? void 0 : dt1.getMonth()) === arr[1] && (dt1 === null || dt1 === void 0 ? void 0 : dt1.getDate()) === arr[2];
+        return dt1 !== null && dt2 !== null && (dt1 === null || dt1 === void 0 ? void 0 : dt1.getFullYear()) === arr[0] && (dt1 === null || dt1 === void 0 ? void 0 : dt1.getMonth()) + 1 === arr[1] && (dt1 === null || dt1 === void 0 ? void 0 : dt1.getDate()) === arr[2];
     }
 }
-// Date.prototype.ToPersianDate = function () {
-//     var resArr = gregorian_to_jalali(this.getFullYear(), this.getMonth() + 1, this.getDate());
-//     var res = resArr[0] + "/";
-//     if (resArr[1] < 10)
-//         res += "0" + resArr[1] + "/";
-//     else res += resArr[1] + "/";
-//     if (resArr[2] < 10)
-//         res += "0" + resArr[2];
-//     else res += resArr[2];
-//     return res;
-// };
-// Date.prototype.ToPersianDateTime = function () {
-//     var resArr = gregorian_to_jalali(this.getFullYear(), this.getMonth() + 1, this.getDate());
-//     var res = resArr[0] + "/";
-//     if (resArr[1] < 10)
-//         res += "0" + resArr[1] + "/";
-//     else res += resArr[1] + "/";
-//     if (resArr[2] < 10)
-//         res += "0" + resArr[2];
-//     else res += resArr[2];
-//     let h = this.getHours();
-//     res += " - ";
-//     //hours
-//     if (h < 10) res += "0" + h;
-//     else res += h;
-//     if (h < 10) res += "0" + h;
-//     //minutes
-//     res += ":";
-//     let min = this.getMinutes();
-//     if (min < 10) res += "0" + min;
-//     else res += min;
-//     return res;
-// };
-// export const daysOfEachMonth = (locale: string, date: Date): number => {
-//     let year = date.getFullYear();
-//     let month: number;
-//     switch (locale) {
-//         case "fa-IR":
-//             month = convertToEnNumber(new Intl.DateTimeFormat("fa-IR", { month: "numeric" }).format(date));
-//             if (month >= 1 && month <= 6) return 31;
-//             else if (month <= 11) return 30;
-//             else if (isKabise(locale, year)) return 30;
-//             else return 29;
-//         default:
-//             month = date.getMonth() + 1;
-//             if ([1, 3, 5, 7, 8, 10, 12].includes(month)) return 31;
-//             else if ([4, 6, 9, 11].includes(month)) return 30;
-//             else if (isKabise(locale, year)) return 29;
-//             else return 28;
-//     }
-// }
 export var convertToLocalDate = function (date, locale) {
     var y = new Intl.DateTimeFormat(locale.name, { year: "numeric" }).format(date);
     var m = new Intl.DateTimeFormat(locale.name, { month: "numeric" }).format(date);

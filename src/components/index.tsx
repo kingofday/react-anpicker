@@ -1,2 +1,3 @@
 export * from './anPicker';
-export * from "./models"
+export * from "./Models/MainProps";
+export * from "./Models/Locale";

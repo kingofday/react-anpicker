@@ -1,6 +1,7 @@
 .anpicker {
     --blue: #448aff;
     --blueHover: #3d7ce5;
+    --border: #e0e3eb;
     --text: #323e54;
     --bg: #fff;
     --disabledBg: #f0f3fa;
@@ -9,22 +10,6 @@
     position: relative;
     color: var(--text);
     font-size: var(--fs12);
-    @mixin btn {
-        background-color: transparent;
-        border: none;
-        outline: none;
-        cursor: pointer;
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        padding: 0;
-        border-radius: 6px;
-        width: var(--btnSize);
-        height: var(--btnSize);
-    }
-    button {
-        @include btn;
-    }
     table {
         border-collapse: collapse;
         width: 100%;
@@ -38,15 +23,18 @@
     }
     .popup {
         .main {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
             position: absolute;
             background-color: var(--bg);
             box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
             min-width: 234px;
             border-radius: 6px;
+            padding: 0 10px;
             .selector-heading {
                 display: flex;
                 justify-content: space-between;
-                margin-bottom: 7px;
                 svg {
                     path {
                         stroke: var(--text);
@@ -58,7 +46,12 @@
                     align-items: center;
                     gap: 5px;
                     a {
-                        @include btn;
+                        cursor: pointer;
+                        display: inline-flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: var(--btnSize);
+                        height: var(--btnSize);
                     }
                 }
             }
@@ -78,29 +71,60 @@
                     }
                 }
                 .day {
+                    position: relative;
                     button {
                         width: var(--btnSize);
                         height: var(--btnSize);
                     }
-                    &.selected {
+                    &.current:not(.selected) {
+                        color: var(--blue);
                         button {
-                            background-color: var(--blue);
-                            color: var(--bg);
+                            color: var(--blue);
                         }
-                    }
-                    &.current {
-                        button {
-                            border-bottom: solid 2px var(--blue);
+                        &:after {
+                            content: "";
+                            position: absolute;
+                            bottom: 0;
+                            left: 5px;
+                            height: 2px;
+                            background-color: var(--blue);
+                            width: calc(100% - 10px);
                         }
                     }
                 }
             }
             .years {
                 border-radius: 6px;
-                td {
-                    button {
-                    }
+            }
+            .selected {
+                button {
+                    background-color: var(--blue);
+                    color: var(--bg);
                 }
+            }
+            .btn-td {
+                background-color: transparent;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                padding: 0;
+                border-radius: 6px;
+                width: var(--btnSize);
+                height: var(--btnSize);
+            }
+            .today-button {
+                background: transparent;
+                outline: none;
+                border: none;
+                border-top: solid 1px var(--border);
+                height: 44px;
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
             }
         }
     }

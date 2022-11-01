@@ -1,14 +1,27 @@
 import React, { useState } from 'react';
 import { AnPicker } from 'react-anpicker';
-
+import "./index.css";
+const CustomInput = (props: React.InputHTMLAttributes<HTMLInputElement>) => {
+  return <input {...props} style={{ padding: 10, borderRadius: 4, border: "solid 1px #ccc" }} />
+}
 function App() {
   const [date, setDate] = useState(null);
-  const handleChange = (date: Date | null, locale: string | null) => { }
+  const handleChange = (date: Date | null, localDate: string | null) => { console.log(date, localDate) }
   return (
     <div className="App">
-      <div className='fa' dir='rtl'>
-        <h1>Persian</h1>
-        <AnPicker defaultOpen={false} value={date} onChange={handleChange} />
+      <div className='row' dir='rtl'>
+        <div className='card'>
+          <h1 className='title'>فارسی</h1>
+          <AnPicker value={date} onChange={handleChange} />
+        </div>
+        <div className='card'>
+          <h1 className='title'>با اینپوت دلخواه</h1>
+          <AnPicker value={date} onChange={handleChange} inputControl={CustomInput} />
+        </div>
+        <div className='card'>
+          <h1 className='title'>زبان انگلیسی</h1>
+          <AnPicker value={date} onChange={handleChange} inputControl={CustomInput} />
+        </div>
       </div>
     </div>
   );

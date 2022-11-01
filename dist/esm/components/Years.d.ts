@@ -1,7 +1,10 @@
+import Locale from "./Models/Locale";
 interface Props {
-    date: Date;
+    locale: Locale;
+    localYear: number;
     pageNumber: number;
+    hidden: boolean;
     onSelectYear: (year: number) => void;
 }
-declare const Years: ({ date, pageNumber, onSelectYear }: Props) => JSX.Element;
+declare const Years: ({ localYear, locale, pageNumber, hidden, onSelectYear }: Props) => JSX.Element;
 export default Years;

@@ -1,6 +1,7 @@
 export interface Locale {
     name: string;
     startOfWeek: number;
+    rtl: boolean;
     daysOfEachMonth: (year: number, month: number) => number;
     numberConverter: (number: string) => number;
     convertToDate: (localYear: number, localMonth: number, localDay: number) => [number, number, number];
@@ -13,12 +14,6 @@ export interface MainProps {
     inputControl?: React.ElementType;
     defaultOpen: boolean;
     locale?: Locale;
-}
-export interface DaysProps {
-    locale: Locale;
-    localYear: number;
-    localMonth: number;
-    onSelect: (day: number) => void;
 }
 export declare type Day = {
     number: number;

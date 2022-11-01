@@ -1,4 +1,4 @@
-import { Locale } from "../models"
+import Locale from "../Models/Locale"
 export const isKabise = (year: number) => {
     if (year > 1244 && year < 1342)
         return [1, 5, 9, 13, 17, 21, 26, 30].includes(year % 33);
@@ -7,6 +7,8 @@ export const isKabise = (year: number) => {
 const faLocale: Locale = {
     name: "fa-IR",
     startOfWeek: -2,
+    rtl: true,
+    todayButtonText: "امروز",
     numberConverter: (n: string) => parseFloat(n
         .replace(/[\u0660-\u0669]/g, function (c) {
             return (c.charCodeAt(0) - 0x0660).toString();

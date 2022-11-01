@@ -11,6 +11,8 @@ exports.isKabise = isKabise;
 var faLocale = {
     name: "fa-IR",
     startOfWeek: -2,
+    rtl: true,
+    todayButtonText: "امروز",
     numberConverter: function (n) { return parseFloat(n
         .replace(/[\u0660-\u0669]/g, function (c) {
         return (c.charCodeAt(0) - 0x0660).toString();

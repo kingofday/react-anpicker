@@ -1,8 +1,8 @@
 import './anPicker.css';
-import { useState, useEffect, useRef, useLayoutEffect, useMemo } from 'react'
+import { useState, useEffect, useRef, useLayoutEffect, useMemo, useCallback } from 'react'
 import Days from "./days";
-import { getMonth, getYear, convertToLocalDate } from "./helpers";
-import { MainProps } from "./models";
+import { getMonthName, getYear, convertToLocalDate } from "./helpers";
+import MainProps from "./Models/MainProps";
 import faLocale from "./Locales/faLocale";
 
 import Years from './Years';
@@ -31,9 +31,10 @@ export const AnPicker = ({
     className = '',
     onChange,
     value = null,
-    inputControl: Input,
-    defaultOpen = false,
-    locale = faLocale
+    defaultOpen=false,
+    showTodayBottom = true,
+    locale = faLocale,
+    inputControl: Input
 }: MainProps): JSX.Element => {
     const anPickerRef = useRef<HTMLDivElement>(null);
     let init = useMemo(() => {
@@ -48,49 +49,88 @@ export const AnPicker = ({
     const [localYear, setYear] = useState<number>(init[0]);
     const [localMonth, setMonth] = useState<number>(init[1]);
     const [localDay, setDay] = useState<number>(init[2]);
+    const [changed, valueChanged] = useState<boolean>(false);
     const [mode, setMode] = useState<Modes>(Modes.days);
     const [yearPageNumber, setYearPageNumber] = useState(0);
-    const currentDate = new Date();
     const onSelectDay = (dayNumber: number) => {
         setDay(dayNumber);
+        valueChanged(true);
     }
     const onSelectMonth = (month: number) => {
         setMonth(month);
+        valueChanged(true);
+        handleMode(Modes.days);
     }
     const onSelectYear = (year: number) => {
         setYear(year);
+        valueChanged(true);
+        handleMode(Modes.days);
+
     }
     const nextYear = () => {
         setYearPageNumber(y => y + 1);
+        handleMode(Modes.years, true);
     }
     const prevYear = () => {
-        console.log(yearPageNumber);
-        setYearPageNumber(y => y - 1);
-
+        setYearPageNumber(y => localYear > 12 ? y - 1 : y);
+        handleMode(Modes.years, true);
     }
-    const nextMonth = () => { }
-    const prevMonth = () => { }
-    const handleClickOutside = (e: MouseEvent) => {
-        if (!anPickerRef.current?.contains(e.target as Node)) {
-            toggle(false);
-        }
+    const nextMonth = () => {
+        setMonth(m => m === 12 ? 1 : m + 1);
+        valueChanged(true);
+        handleMode(Modes.days);
     }
+    const prevMonth = () => {
+        setMonth(m => m === 1 ? 12 : m - 1);
+        valueChanged(true);
+        handleMode(Modes.days);
+    }
+    const setToday = () => {
+        let eqDateArr = convertToLocalDate(new Date(), locale);
+        valueChanged(true);
+        setYear(eqDateArr[0]);
+        setMonth(eqDateArr[1]);
+        setDay(eqDateArr[2]);
+    }
+    const handleMode = useCallback((newMode: Modes, igonrePrev?: boolean) => {
+        setMode(m => {
+            if (!igonrePrev && m === newMode) return Modes.days;
+            else return newMode;
+        })
+    }, []);
     useEffect(() => {
-        let date = locale.convertToDate(localYear, localMonth, localDay)
+        let baseYear = getYear(new Date(), locale.name);
+        setYear(locale.numberConverter(baseYear) + yearPageNumber * 12);
+    }, [yearPageNumber]);
+    useEffect(() => {
+        let date = locale.convertToDate(localYear, localMonth, localDay);
         onChange(new Date(`${date[0]}/${date[1]}/${date[2]}`), `${localYear}/${localMonth}/${localDay}`);
     }, [localYear, localMonth, localDay]);
-    useLayoutEffect(() => {
-        if (!anPickerRef || !anPickerRef.current) return;
-        document.addEventListener("click", handleClickOutside);
-    }, [anPickerRef.current]);
     useEffect(() => {
+        if (!value) return;
+        const eqArr = convertToLocalDate(value as Date, locale);
+        if (eqArr[0] !== localYear)
+            setYear(eqArr[0]);
+        if (eqArr[1] !== localMonth)
+            setMonth(eqArr[1]);
+        if (eqArr[2] !== localDay)
+            setDay(eqArr[2]);
+    }, [value]);
+    useLayoutEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (!anPickerRef.current?.contains(e.target as Node)) {
+                console.log("outside clicked")
+                toggle(false);
+            }
+        }
+        document.addEventListener("click", handleClickOutside);
         return () => {
             document.removeEventListener("click", handleClickOutside);
         }
-    }, [])
+    }, []);
     return (
         <div className={`anpicker ${className}`} ref={anPickerRef}>
-            {Input ? <Input readOnly onFocus={() => toggle(true)} /> : <input value={value ? new Intl.DateTimeFormat(locale.name).format(value) : ""} readOnly onFocus={() => toggle(true)} />}
+            {Input ? <Input readOnly onFocus={() => toggle(true)} value={value || changed ? `${localYear}/${localMonth}/${localDay}` : ""} /> : <input value={value || changed ? `${localYear}/${localMonth}/${localDay}` : ""} readOnly onFocus={() => toggle(true)} />}
             {isOpen ? <div className="popup">
                 {value ? <div className='sidebar' /> : null}
                 <div className='main'>
@@ -99,7 +139,7 @@ export const AnPicker = ({
                             <a className='next' onClick={nextMonth} role="button">
                                 <PreviousIcon />
                             </a>
-                            <a role="button" onClick={() => setMode(Modes.monthes)}>{value ? getMonth(value, locale.name) : getMonth(currentDate, locale.name)}</a>
+                            <a role="button" onClick={() => handleMode(Modes.monthes)}>{getMonthName(locale.convertToDate(localYear, localMonth, localDay), locale.name)}</a>
                             <a className='prev' onClick={prevMonth} role="button">
                                 <NextIcon />
                             </a>
@@ -108,22 +148,28 @@ export const AnPicker = ({
                             <a className='next' onClick={nextYear} role="button">
                                 <PreviousIcon />
                             </a>
-                            <a role="button" onClick={() => setMode(Modes.years)}>{value ? getYear(value, locale.name) : getYear(currentDate, locale.name)}</a>
+                            <a role="button" onClick={() => handleMode(Modes.years)}>{localYear}</a>
                             <a className='prev' onClick={prevYear} role="button">
                                 <NextIcon />
                             </a>
                         </div>
                     </div>
-                    {(() => {
+                    <Years hidden={mode !== Modes.years} locale={locale} pageNumber={yearPageNumber} onSelectYear={onSelectYear} localYear={localYear} />
+                    <Monthes hidden={mode !== Modes.monthes} locale={locale} onSelect={onSelectMonth} localMonth={localMonth} />
+                    <Days hidden={mode !== Modes.days} locale={locale} localYear={localYear} localMonth={localMonth} localDay={localDay} onSelect={onSelectDay} />
+                    {/* {(() => {
                         switch (mode) {
                             case Modes.years:
-                                return <Years pageNumber={yearPageNumber} onSelectYear={onSelectYear} date={value ?? currentDate} />;
+                                return 
                             case Modes.monthes:
-                                return <Monthes locale={locale} onSelect={onSelectMonth} localMonth={localMonth} />
+                                return 
                             default:
-                                return <Days locale={locale} localYear={localYear} localMonth={localMonth} onSelect={onSelectDay} />;
+                                return 
                         }
-                    })()}
+                    })()} */}
+                    {showTodayBottom && <button className='today-button' onClick={setToday}>
+                        {locale.todayButtonText}
+                    </button>}
                 </div>
             </div> : null}
         </div>
