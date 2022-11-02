@@ -2,9 +2,9 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,yarn,windows,linux,react
 
 ## example package ##
-/example/node_modules
-/example/build
-
+/demo/node_modules
+/demo/build
+/dist
 ### Linux ###
 *~
 

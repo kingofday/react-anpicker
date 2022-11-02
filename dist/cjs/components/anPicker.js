@@ -136,7 +136,7 @@ var AnPicker = function (_a) {
     }, [yearPageNumber]);
     (0, react_1.useEffect)(function () {
         var date = locale.convertToDate(localYear, localMonth, localDay);
-        onChange(new Date("".concat(date[0], "/").concat(date[1], "/").concat(date[2])), "".concat(localYear, "/").concat(localMonth, "/").concat(localDay));
+        onChange(new Date("".concat(date[0], "/").concat(date[1], "/").concat(date[2])), "".concat(localYear, "/").concat(localMonth < 10 ? "0".concat(localYear) : localYear, "/").concat(localDay < 10 ? "0".concat(localDay) : localDay));
     }, [localYear, localMonth, localDay]);
     (0, react_1.useEffect)(function () {
         if (!value)
