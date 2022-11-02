@@ -55,21 +55,21 @@ export const AnPicker = ({
     const [mode, setMode] = useState<Modes>(Modes.days);
     const [yearPageNumber, setYearPageNumber] = useState(0);
     const [innerValue, setInnerValue] = useState('');
-    const onSelectDay = (dayNumber: number) => {
+    const onSelectDay = useCallback((dayNumber: number) => {
         setDay(dayNumber);
         valueChanged(true);
         toggle(false);
-    }
-    const onSelectMonth = (month: number) => {
+    }, []);
+    const onSelectMonth = useCallback((month: number) => {
         setMonth(month);
         valueChanged(true);
         handleMode(Modes.days);
-    }
-    const onSelectYear = (year: number) => {
+    }, []);
+    const onSelectYear = useCallback((year: number) => {
         setYear(year);
         valueChanged(true);
         handleMode(Modes.days);
-    }
+    }, []);
     const nextYear = () => {
         setYearPageNumber(y => y + 1);
         handleMode(Modes.years, true);
@@ -132,6 +132,7 @@ export const AnPicker = ({
         setYear(locale.numberConverter(baseYear) + yearPageNumber * 12);
     }, [yearPageNumber]);
     useEffect(() => {
+        if (!changed) return;
         let date = locale.convertToDate(localYear, localMonth, localDay);
         onChange(new Date(`${date[0]}/${date[1]}/${date[2]}`), `${localYear}/${localMonth < 10 ? `0${localYear}` : localYear}/${localDay < 10 ? `0${localDay}` : localDay}`);
     }, [localYear, localMonth, localDay]);

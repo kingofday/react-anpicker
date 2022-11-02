@@ -38,6 +38,7 @@ function PreviousIcon() {
 }
 var AnPicker = function (_a) {
     var _b = _a.className, className = _b === void 0 ? '' : _b, onChange = _a.onChange, _c = _a.value, value = _c === void 0 ? null : _c, _d = _a.defaultOpen, defaultOpen = _d === void 0 ? false : _d, _e = _a.showTodayBottom, showTodayBottom = _e === void 0 ? true : _e, _f = _a.locale, locale = _f === void 0 ? faLocale_1.default : _f, _g = _a.showSidebar, showSidebar = _g === void 0 ? true : _g, Input = _a.inputControl;
+    console.log("renddered");
     var anPickerRef = (0, react_1.useRef)(null);
     var init = (0, react_1.useMemo)(function () {
         if (value) {
@@ -55,21 +56,21 @@ var AnPicker = function (_a) {
     var _o = (0, react_1.useState)(Modes.days), mode = _o[0], setMode = _o[1];
     var _p = (0, react_1.useState)(0), yearPageNumber = _p[0], setYearPageNumber = _p[1];
     var _q = (0, react_1.useState)(''), innerValue = _q[0], setInnerValue = _q[1];
-    var onSelectDay = function (dayNumber) {
+    var onSelectDay = (0, react_1.useCallback)(function (dayNumber) {
         setDay(dayNumber);
         valueChanged(true);
         toggle(false);
-    };
-    var onSelectMonth = function (month) {
+    }, []);
+    var onSelectMonth = (0, react_1.useCallback)(function (month) {
         setMonth(month);
         valueChanged(true);
         handleMode(Modes.days);
-    };
-    var onSelectYear = function (year) {
+    }, []);
+    var onSelectYear = (0, react_1.useCallback)(function (year) {
         setYear(year);
         valueChanged(true);
         handleMode(Modes.days);
-    };
+    }, []);
     var nextYear = function () {
         setYearPageNumber(function (y) { return y + 1; });
         handleMode(Modes.years, true);
@@ -135,6 +136,8 @@ var AnPicker = function (_a) {
         setYear(locale.numberConverter(baseYear) + yearPageNumber * 12);
     }, [yearPageNumber]);
     (0, react_1.useEffect)(function () {
+        if (!changed)
+            return;
         var date = locale.convertToDate(localYear, localMonth, localDay);
         onChange(new Date("".concat(date[0], "/").concat(date[1], "/").concat(date[2])), "".concat(localYear, "/").concat(localMonth < 10 ? "0".concat(localYear) : localYear, "/").concat(localDay < 10 ? "0".concat(localDay) : localDay));
     }, [localYear, localMonth, localDay]);
@@ -142,8 +145,11 @@ var AnPicker = function (_a) {
         if (!value)
             return;
         var eqArr = (0, helpers_1.convertToLocalDate)(value, locale);
-        if (eqArr[0] !== localYear)
+        console.log("eqArr", eqArr);
+        if (eqArr[0] !== localYear) {
+            console.log("no way");
             setYear(eqArr[0]);
+        }
         if (eqArr[1] !== localMonth)
             setMonth(eqArr[1]);
         if (eqArr[2] !== localDay)
