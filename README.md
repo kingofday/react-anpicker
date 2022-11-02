@@ -7,7 +7,7 @@ react-anpicker is a free and light component in react for date picker mostly bas
   - rtl/ltr
   - other calendars
 
-![demo image](src/assets/persian.png)
+![demo image](https://github.com/kingofday/react-anpicker/blob/master/src/assets/persian.png)
 
 ## Installation
 
@@ -22,7 +22,7 @@ Minimal Usage:
 import { AnPicker } from 'react-anpicker';
 ...
     const [date, setDate] = useState(null);
-    const handleChange = (date: Date | null, locale: string | null) => { }
+    const handleChange = (date: Date | null, localDate: string | null) => { }
     <AnPicker value={date} onChange={handleChange} />
 ...
 ```
