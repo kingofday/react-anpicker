@@ -9,6 +9,7 @@ var isKabise = function (year) {
 };
 exports.isKabise = isKabise;
 var faLocale = {
+    title: "هجری شمسی",
     name: "fa-IR",
     startOfWeek: -2,
     rtl: true,

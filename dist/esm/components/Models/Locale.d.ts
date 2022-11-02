@@ -1,4 +1,5 @@
 export default interface Locale {
+    title: string;
     name: string;
     startOfWeek: number;
     rtl: boolean;

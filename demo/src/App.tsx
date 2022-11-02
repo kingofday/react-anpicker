@@ -12,7 +12,7 @@ function App() {
       <div className='row' dir='rtl'>
         <div className='card'>
           <h1 className='title'>فارسی</h1>
-          <AnPicker value={date} onChange={handleChange} />
+          <AnPicker value={date} onChange={handleChange} showSidebar={true} />
         </div>
         <div className='card'>
           <h1 className='title'>با اینپوت دلخواه</h1>

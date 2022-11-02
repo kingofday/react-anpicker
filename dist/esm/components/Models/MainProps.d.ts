@@ -9,10 +9,10 @@ export default interface MainProps {
     onChange: (date: Date | null, localDate: string | null) => void;
     value: Date | null;
     className?: string;
-    theme?: 'dark' | 'light';
     inputControl?: ElementType<CustomInputRequiredProps>;
     defaultOpen?: boolean;
     showTodayBottom?: boolean;
     locale?: Locale;
+    showSidebar?: boolean;
 }
 export {};

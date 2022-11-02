@@ -5,6 +5,7 @@ export const isKabise = (year: number) => {
     else return [1, 5, 9, 13, 17, 22, 26, 30].includes(year % 33);
 }
 const faLocale: Locale = {
+    title: "هجری شمسی",
     name: "fa-IR",
     startOfWeek: -2,
     rtl: true,

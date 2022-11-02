@@ -27,6 +27,7 @@ import { AnPicker } from 'react-anpicker';
 ...
 ```
 #### Props
+- **showTodayBottom:** :boolean- today button be visible or not
 - **defaultOpen:** :boolean- picker be visible at first or not
 - **value:** :Date | null- initital value
 - **onChange:** :(date: Date | null, localDate: string | null) => void- a function that fires after change and gives you eq date and local date
@@ -34,18 +35,18 @@ import { AnPicker } from 'react-anpicker';
 - **inputControl:** :ReactElemt- for passing an custom input from other libraries
 - **locale:** :
 {
-    name: string;
-    startOfWeek: number;
+    title:string-calander title in sidebar
+    name: string-locale from Intl like "en-US" or "fa-IR" ,...
+    startOfWeek: number-if your week not starts with monday, you can specifing it(sunday=-1,tusday=1);
     rtl: boolean;
     todayButtonText: string,
-    daysOfEachMonth: (year: number, month: number) => number;
-    numberConverter: (number: string) => number;
-    convertToDate: (localYear: number, localMonth: number, localDay: number) => [number, number, number];
+    daysOfEachMonth: (year: number, month: number) => number-a functio that return number of days in each month
+    numberConverter: (number: string) => number- get number in other languages in convert them to eng number;
+    convertToDate: (localYear: number, localMonth: number, localDay: number) => [number, number, number]- a function that takes local daye and retrun eq in gregorian date;
 }
 an object that needs to be set if you use another locale, default is been configed fot "fa-Ir"
 ```
 ##### Todos
 
  - ltr debguugging with "en-US" locale
- - Add Sidebar
 

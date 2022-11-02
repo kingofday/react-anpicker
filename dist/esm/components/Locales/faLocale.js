@@ -5,6 +5,7 @@ export var isKabise = function (year) {
         return [1, 5, 9, 13, 17, 22, 26, 30].includes(year % 33);
 };
 var faLocale = {
+    title: "هجری شمسی",
     name: "fa-IR",
     startOfWeek: -2,
     rtl: true,

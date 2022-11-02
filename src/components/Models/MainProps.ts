@@ -13,4 +13,5 @@ export default interface MainProps {
     defaultOpen?: boolean;
     showTodayBottom?: boolean;
     locale?: Locale;
+    showSidebar?: boolean;
 }
