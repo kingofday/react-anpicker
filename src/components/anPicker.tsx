@@ -47,6 +47,7 @@ export const AnPicker = ({
             return convertToLocalDate(new Date(), locale);
         }
     }, []);
+    const hadValue = useMemo(()=>!!value,[]);
     const [isOpen, toggle] = useState<boolean>(defaultOpen);
     const [localYear, setYear] = useState<number>(init[0]);
     const [localMonth, setMonth] = useState<number>(init[1]);
@@ -105,6 +106,7 @@ export const AnPicker = ({
         return innerValue ? innerValue : (value || changed ? `${localYear}/${localMonth < 10 ? `0${localMonth}` : localMonth}/${localDay < 10 ? `0${localDay}` : localDay}` : "");
     }
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        console.log("handleChange",e.target.value)
         if (!e.target.value) {
             valueChanged(false);
             onChange(null, null);
@@ -143,7 +145,13 @@ export const AnPicker = ({
         onChange(new Date(`${date[0]}/${date[1]}/${date[2]}`), `${localYear}/${localMonth < 10 ? `0${localYear}` : localYear}/${localDay < 10 ? `0${localDay}` : localDay}`);
     }, [localYear, localMonth, localDay]);
     useEffect(() => {
-        if (!value) return;
+        if (!value) {
+            if (hadValue) {
+                valueChanged(false);
+                onChange(null, null);
+            }
+            return;
+        }
         const eqArr = convertToLocalDate(value as Date, locale);
         if (eqArr[0] !== localYear)
             setYear(eqArr[0]);
@@ -165,7 +173,7 @@ export const AnPicker = ({
     }, []);
     return (
         <div className={`anpicker ${className}`} ref={anPickerRef}>
-            {Input ? <Input readOnly onFocus={() => toggle(true)} value={valueToShow()} /> : <input value={valueToShow()} onChange={handleChange} onFocus={() => toggle(true)} onBlur={handleBlure} />}
+            {Input ? <Input  onChange={handleChange}  onFocus={() => toggle(true)} value={valueToShow()} /> : <input value={valueToShow()} onChange={handleChange} onFocus={() => toggle(true)} onBlur={handleBlure} />}
             {isOpen ? <div className="popup">
                 {showSidebar ? <Sidebar locale={locale} localYear={localYear} localMonth={localMonth} localDay={localDay} /> : null}
                 <div className='main'>
