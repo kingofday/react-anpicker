@@ -33,6 +33,7 @@ import { AnPicker } from 'react-anpicker';
 - **onChange:** :(date: Date | null, localDate: string | null) => void- a function that fires after change and gives you eq date and local date
 - **showTodayBottom:** :boolean- today button be visible or not
 - **inputControl:** :ReactElemt- for passing an custom input from other libraries
+- **showSidebar:** :boolean: show sidebar beside picker section
 - **locale:** :
  ```
 {

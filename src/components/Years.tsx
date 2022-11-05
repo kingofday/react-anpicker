@@ -14,7 +14,7 @@ const Years = ({ localYear, locale, pageNumber = 0, hidden = true, onSelectYear 
         <tbody>
             {[[0, 1, 2], [3, 4, 5], [6, 7, 8], [9, 10, 11]].map((arr, idx) => <tr key={idx}>
                 {arr.map(counter => {
-                    let year = (pageNumber * 12) + counter + currentYear;
+                    let year = (pageNumber * 12) + counter + currentYear - 1;
                     return <td className={`${localYear === year ? "selected" : ""}`} key={counter}>
                         <button className="btn-td" onClick={() => onSelectYear(year)} role="button" type="button">{year}</button>
                     </td>

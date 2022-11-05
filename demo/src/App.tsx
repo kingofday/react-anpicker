@@ -7,7 +7,7 @@ const CustomInput = (props: React.InputHTMLAttributes<HTMLInputElement>) => {
 function App() {
   const [date, setDate] = useState<Date|null>(new Date());
   const handleChange = (date: Date | null, localDate: string | null) => {
-    console.log(date, localDate);
+    console.log("after changed",date)
     setDate(date);
   }
   return (
@@ -17,14 +17,14 @@ function App() {
           <h1 className='title'>فارسی</h1>
           <AnPicker value={date} onChange={handleChange} showSidebar={true} />
         </div>
-        {/* <div className='card'>
+        <div className='card'>
           <h1 className='title'>با اینپوت دلخواه</h1>
           <AnPicker value={date} onChange={handleChange} inputControl={CustomInput} />
         </div>
         <div className='card'>
           <h1 className='title'>زبان انگلیسی</h1>
           <AnPicker value={date} onChange={handleChange} inputControl={CustomInput} />
-        </div> */}
+        </div>
       </div>
     </div>
   );

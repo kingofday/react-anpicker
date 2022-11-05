@@ -38,7 +38,6 @@ function PreviousIcon() {
 }
 var AnPicker = function (_a) {
     var _b = _a.className, className = _b === void 0 ? '' : _b, onChange = _a.onChange, _c = _a.value, value = _c === void 0 ? null : _c, _d = _a.defaultOpen, defaultOpen = _d === void 0 ? false : _d, _e = _a.showTodayBottom, showTodayBottom = _e === void 0 ? true : _e, _f = _a.locale, locale = _f === void 0 ? faLocale_1.default : _f, _g = _a.showSidebar, showSidebar = _g === void 0 ? true : _g, Input = _a.inputControl;
-    console.log("renddered");
     var anPickerRef = (0, react_1.useRef)(null);
     var init = (0, react_1.useMemo)(function () {
         if (value) {
@@ -105,14 +104,21 @@ var AnPicker = function (_a) {
         });
     }, []);
     var valueToShow = function () {
+        console.log("valueToShow", value, changed);
         return innerValue ? innerValue : (value || changed ? "".concat(localYear, "/").concat(localMonth < 10 ? "0".concat(localMonth) : localMonth, "/").concat(localDay < 10 ? "0".concat(localDay) : localDay) : "");
     };
     var handleChange = function (e) {
+        console.log("onChange", e.target.value);
+        if (!e.target.value) {
+            valueChanged(false);
+            onChange(null, null);
+        }
         setInnerValue(e.target.value);
     };
     var handleBlure = function () {
-        if (!innerValue)
+        if (!innerValue) {
             return;
+        }
         var arr = innerValue.split('/');
         if (arr.length !== 3) {
             setInnerValue('');
@@ -145,11 +151,8 @@ var AnPicker = function (_a) {
         if (!value)
             return;
         var eqArr = (0, helpers_1.convertToLocalDate)(value, locale);
-        console.log("eqArr", eqArr);
-        if (eqArr[0] !== localYear) {
-            console.log("no way");
+        if (eqArr[0] !== localYear)
             setYear(eqArr[0]);
-        }
         if (eqArr[1] !== localMonth)
             setMonth(eqArr[1]);
         if (eqArr[2] !== localDay)

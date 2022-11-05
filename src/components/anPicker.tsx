@@ -105,10 +105,16 @@ export const AnPicker = ({
         return innerValue ? innerValue : (value || changed ? `${localYear}/${localMonth < 10 ? `0${localMonth}` : localMonth}/${localDay < 10 ? `0${localDay}` : localDay}` : "");
     }
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.value) {
+            valueChanged(false);
+            onChange(null, null);
+        }
         setInnerValue(e.target.value);
     }
     const handleBlure = () => {
-        if (!innerValue) return;
+        if (!innerValue) {
+            return;
+        }
         let arr = innerValue.split('/');
         if (arr.length !== 3) {
             setInnerValue('');
