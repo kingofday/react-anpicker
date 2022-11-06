@@ -1,5 +1,5 @@
 import './anPicker.css';
-import { useState, useEffect, useRef, useLayoutEffect, useMemo, useCallback, ChangeEvent } from 'react'
+import { useState, useEffect, useRef, useLayoutEffect, useMemo, useCallback, ChangeEvent, CSSProperties } from 'react'
 import Days from "./days";
 import { getMonthName, getYear, convertToLocalDate } from "./helpers";
 import MainProps from "./Models/MainProps";
@@ -8,24 +8,12 @@ import faLocale from "./Locales/faLocale";
 import Years from './Years';
 import Monthes from './Monthes';
 import Sidebar from './Sidebar';
+import ChevronIcon from './ChevronIcon';
 
 enum Modes {
     days,
     monthes,
     years
-}
-
-function NextIcon() {
-    return <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M5.25 9.5L0.75 5L5.25 0.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-
-}
-function PreviousIcon() {
-    return <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0.75 9.5L5.25 5L0.75 0.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>;
-
 }
 
 export const AnPicker = ({
@@ -39,6 +27,7 @@ export const AnPicker = ({
     inputControl: Input
 }: MainProps): JSX.Element => {
     const anPickerRef = useRef<HTMLDivElement>(null);
+    const popupRef = useRef<HTMLDivElement>(null);
     let init = useMemo(() => {
         if (value) {
             return convertToLocalDate(value as Date, locale);
@@ -47,7 +36,7 @@ export const AnPicker = ({
             return convertToLocalDate(new Date(), locale);
         }
     }, []);
-    const hadValue = useMemo(()=>!!value,[]);
+    const hadValue = useMemo(() => !!value, []);
     const [isOpen, toggle] = useState<boolean>(defaultOpen);
     const [localYear, setYear] = useState<number>(init[0]);
     const [localMonth, setMonth] = useState<number>(init[1]);
@@ -56,6 +45,7 @@ export const AnPicker = ({
     const [mode, setMode] = useState<Modes>(Modes.days);
     const [yearPageNumber, setYearPageNumber] = useState(0);
     const [innerValue, setInnerValue] = useState('');
+    const [popupStyle, setPopupStyle] = useState<CSSProperties | undefined>(undefined);
     const onSelectDay = useCallback((dayNumber: number) => {
         setDay(dayNumber);
         valueChanged(true);
@@ -106,7 +96,7 @@ export const AnPicker = ({
         return innerValue ? innerValue : (value || changed ? `${localYear}/${localMonth < 10 ? `0${localMonth}` : localMonth}/${localDay < 10 ? `0${localDay}` : localDay}` : "");
     }
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        console.log("handleChange",e.target.value)
+        console.log("handleChange", e.target.value)
         if (!e.target.value) {
             valueChanged(false);
             onChange(null, null);
@@ -171,29 +161,40 @@ export const AnPicker = ({
             document.removeEventListener("click", handleClickOutside);
         }
     }, []);
+    useEffect(() => {
+        if (isOpen) {
+            const rect = popupRef.current?.getBoundingClientRect();
+            console.log("rect", rect, window.innerWidth)
+            if (!rect) return;
+            if (rect.x < 0) setPopupStyle({ left: 0 });
+            if (rect.x + rect.width > window.innerWidth) {
+                setPopupStyle(locale.rtl ? { right: 0 } : { left: 0 });
+            }
+        }
+    }, [isOpen])
     return (
-        <div className={`anpicker ${className}`} ref={anPickerRef}>
-            {Input ? <Input  onChange={handleChange}  onFocus={() => toggle(true)} value={valueToShow()} /> : <input value={valueToShow()} onChange={handleChange} onFocus={() => toggle(true)} onBlur={handleBlure} />}
-            {isOpen ? <div className="popup">
+        <div className={`anpicker ${className}`} ref={anPickerRef} dir={locale.rtl ? "rtl" : "ltr"}>
+            {Input ? <Input onChange={handleChange} onFocus={() => toggle(true)} value={valueToShow()} /> : <input value={valueToShow()} onChange={handleChange} onFocus={() => toggle(true)} onBlur={handleBlure} />}
+            {isOpen ? <div className="popup" ref={popupRef} style={popupStyle}>
                 {showSidebar ? <Sidebar locale={locale} localYear={localYear} localMonth={localMonth} localDay={localDay} /> : null}
                 <div className='main'>
                     <div className='selector-heading'>
                         <div className='monthes'>
                             <a className='next' onClick={nextMonth} role="button">
-                                <PreviousIcon />
+                                <ChevronIcon type="next" rtl={locale.rtl} />
                             </a>
                             <a role="button" onClick={() => handleMode(Modes.monthes)}>{getMonthName(locale.convertToDate(localYear, localMonth, localDay), locale.name)}</a>
                             <a className='prev' onClick={prevMonth} role="button">
-                                <NextIcon />
+                                <ChevronIcon type="prev" rtl={locale.rtl} />
                             </a>
                         </div>
                         <div className='years'>
                             <a className='next' onClick={nextYear} role="button">
-                                <PreviousIcon />
+                                <ChevronIcon type="next" rtl={locale.rtl} />
                             </a>
                             <a role="button" onClick={() => handleMode(Modes.years)}>{localYear}</a>
                             <a className='prev' onClick={prevYear} role="button">
-                                <NextIcon />
+                                <ChevronIcon type="prev" rtl={locale.rtl} />
                             </a>
                         </div>
                     </div>

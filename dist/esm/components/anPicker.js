@@ -18,21 +18,17 @@ import faLocale from "./Locales/faLocale";
 import Years from './Years';
 import Monthes from './Monthes';
 import Sidebar from './Sidebar';
+import ChevronIcon from './ChevronIcon';
 var Modes;
 (function (Modes) {
     Modes[Modes["days"] = 0] = "days";
     Modes[Modes["monthes"] = 1] = "monthes";
     Modes[Modes["years"] = 2] = "years";
 })(Modes || (Modes = {}));
-function NextIcon() {
-    return _jsx("svg", __assign({ width: "6", height: "10", viewBox: "0 0 6 10", fill: "none", xmlns: "http://www.w3.org/2000/svg" }, { children: _jsx("path", { d: "M5.25 9.5L0.75 5L5.25 0.5", strokeLinecap: "round", strokeLinejoin: "round" }) }));
-}
-function PreviousIcon() {
-    return _jsx("svg", __assign({ width: "6", height: "10", viewBox: "0 0 6 10", fill: "none", xmlns: "http://www.w3.org/2000/svg" }, { children: _jsx("path", { d: "M0.75 9.5L5.25 5L0.75 0.5", strokeLinecap: "round", strokeLinejoin: "round" }) }));
-}
 export var AnPicker = function (_a) {
     var _b = _a.className, className = _b === void 0 ? '' : _b, onChange = _a.onChange, _c = _a.value, value = _c === void 0 ? null : _c, _d = _a.defaultOpen, defaultOpen = _d === void 0 ? false : _d, _e = _a.showTodayBottom, showTodayBottom = _e === void 0 ? true : _e, _f = _a.locale, locale = _f === void 0 ? faLocale : _f, _g = _a.showSidebar, showSidebar = _g === void 0 ? true : _g, Input = _a.inputControl;
     var anPickerRef = useRef(null);
+    var popupRef = useRef(null);
     var init = useMemo(function () {
         if (value) {
             return convertToLocalDate(value, locale);
@@ -50,6 +46,7 @@ export var AnPicker = function (_a) {
     var _o = useState(Modes.days), mode = _o[0], setMode = _o[1];
     var _p = useState(0), yearPageNumber = _p[0], setYearPageNumber = _p[1];
     var _q = useState(''), innerValue = _q[0], setInnerValue = _q[1];
+    var _r = useState(undefined), popupStyle = _r[0], setPopupStyle = _r[1];
     var onSelectDay = useCallback(function (dayNumber) {
         setDay(dayNumber);
         valueChanged(true);
@@ -169,5 +166,19 @@ export var AnPicker = function (_a) {
             document.removeEventListener("click", handleClickOutside);
         };
     }, []);
-    return (_jsxs("div", __assign({ className: "anpicker ".concat(className), ref: anPickerRef }, { children: [Input ? _jsx(Input, { onChange: handleChange, onFocus: function () { return toggle(true); }, value: valueToShow() }) : _jsx("input", { value: valueToShow(), onChange: handleChange, onFocus: function () { return toggle(true); }, onBlur: handleBlure }), isOpen ? _jsxs("div", __assign({ className: "popup" }, { children: [showSidebar ? _jsx(Sidebar, { locale: locale, localYear: localYear, localMonth: localMonth, localDay: localDay }) : null, _jsxs("div", __assign({ className: 'main' }, { children: [_jsxs("div", __assign({ className: 'selector-heading' }, { children: [_jsxs("div", __assign({ className: 'monthes' }, { children: [_jsx("a", __assign({ className: 'next', onClick: nextMonth, role: "button" }, { children: _jsx(PreviousIcon, {}) })), _jsx("a", __assign({ role: "button", onClick: function () { return handleMode(Modes.monthes); } }, { children: getMonthName(locale.convertToDate(localYear, localMonth, localDay), locale.name) })), _jsx("a", __assign({ className: 'prev', onClick: prevMonth, role: "button" }, { children: _jsx(NextIcon, {}) }))] })), _jsxs("div", __assign({ className: 'years' }, { children: [_jsx("a", __assign({ className: 'next', onClick: nextYear, role: "button" }, { children: _jsx(PreviousIcon, {}) })), _jsx("a", __assign({ role: "button", onClick: function () { return handleMode(Modes.years); } }, { children: localYear })), _jsx("a", __assign({ className: 'prev', onClick: prevYear, role: "button" }, { children: _jsx(NextIcon, {}) }))] }))] })), _jsx(Years, { hidden: mode !== Modes.years, locale: locale, pageNumber: yearPageNumber, onSelectYear: onSelectYear, localYear: localYear }), _jsx(Monthes, { hidden: mode !== Modes.monthes, locale: locale, onSelect: onSelectMonth, localMonth: localMonth }), _jsx(Days, { hidden: mode !== Modes.days, locale: locale, localYear: localYear, localMonth: localMonth, localDay: localDay, onSelect: onSelectDay }), showTodayBottom && _jsx("button", __assign({ className: 'today-button', onClick: setToday }, { children: locale.todayButtonText }))] }))] })) : null] })));
+    useEffect(function () {
+        var _a;
+        if (isOpen) {
+            var rect = (_a = popupRef.current) === null || _a === void 0 ? void 0 : _a.getBoundingClientRect();
+            console.log("rect", rect, window.innerWidth);
+            if (!rect)
+                return;
+            if (rect.x < 0)
+                setPopupStyle({ left: 0 });
+            if (rect.x + rect.width > window.innerWidth) {
+                setPopupStyle(locale.rtl ? { right: 0 } : { left: 0 });
+            }
+        }
+    }, [isOpen]);
+    return (_jsxs("div", __assign({ className: "anpicker ".concat(className), ref: anPickerRef, dir: locale.rtl ? "rtl" : "ltr" }, { children: [Input ? _jsx(Input, { onChange: handleChange, onFocus: function () { return toggle(true); }, value: valueToShow() }) : _jsx("input", { value: valueToShow(), onChange: handleChange, onFocus: function () { return toggle(true); }, onBlur: handleBlure }), isOpen ? _jsxs("div", __assign({ className: "popup", ref: popupRef, style: popupStyle }, { children: [showSidebar ? _jsx(Sidebar, { locale: locale, localYear: localYear, localMonth: localMonth, localDay: localDay }) : null, _jsxs("div", __assign({ className: 'main' }, { children: [_jsxs("div", __assign({ className: 'selector-heading' }, { children: [_jsxs("div", __assign({ className: 'monthes' }, { children: [_jsx("a", __assign({ className: 'next', onClick: nextMonth, role: "button" }, { children: _jsx(ChevronIcon, { type: "next", rtl: locale.rtl }) })), _jsx("a", __assign({ role: "button", onClick: function () { return handleMode(Modes.monthes); } }, { children: getMonthName(locale.convertToDate(localYear, localMonth, localDay), locale.name) })), _jsx("a", __assign({ className: 'prev', onClick: prevMonth, role: "button" }, { children: _jsx(ChevronIcon, { type: "prev", rtl: locale.rtl }) }))] })), _jsxs("div", __assign({ className: 'years' }, { children: [_jsx("a", __assign({ className: 'next', onClick: nextYear, role: "button" }, { children: _jsx(ChevronIcon, { type: "next", rtl: locale.rtl }) })), _jsx("a", __assign({ role: "button", onClick: function () { return handleMode(Modes.years); } }, { children: localYear })), _jsx("a", __assign({ className: 'prev', onClick: prevYear, role: "button" }, { children: _jsx(ChevronIcon, { type: "prev", rtl: locale.rtl }) }))] }))] })), _jsx(Years, { hidden: mode !== Modes.years, locale: locale, pageNumber: yearPageNumber, onSelectYear: onSelectYear, localYear: localYear }), _jsx(Monthes, { hidden: mode !== Modes.monthes, locale: locale, onSelect: onSelectMonth, localMonth: localMonth }), _jsx(Days, { hidden: mode !== Modes.days, locale: locale, localYear: localYear, localMonth: localMonth, localDay: localDay, onSelect: onSelectDay }), showTodayBottom && _jsx("button", __assign({ className: 'today-button', onClick: setToday }, { children: locale.todayButtonText }))] }))] })) : null] })));
 };

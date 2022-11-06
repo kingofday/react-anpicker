@@ -16,14 +16,14 @@ function App() {
     setDate2(date);
   }
   return (
-    <div className="App">
+    <div className="App" dir='rtl'>
       <div className='row' dir='rtl'>
         <div className='card'>
           <h1 className='title'>فارسی</h1>
           <button onClick={()=>setDate(null)}>remove</button>
           <AnPicker value={date} onChange={handleChange} showSidebar={true} />
         </div>
-        <div className='card'>
+        <div className='card' dir="ltr">
           <h1 className='title'>فارسی</h1>
           <button onClick={()=>setDate2(null)}>remove2</button>
           <AnPicker  value={date2} onChange={handleChange2} showSidebar={true} />
