@@ -1,4 +1,4 @@
-# react-angrid
+# react-anpicker
 
 
 react-anpicker is a free and light component in react for date picker mostly based on Intl and predefined function for converting dates
