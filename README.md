@@ -11,7 +11,7 @@ react-anpicker is a free and light component in react for date picker mostly bas
 
 ## Installation
 
-react-angrid requires react "^18.2.0", react-dome "^18.2.0" to run.
+react-anpicker requires react "^18.2.0", react-dome "^18.2.0" to run.
 ```
 npm i react-anpicker
 ```

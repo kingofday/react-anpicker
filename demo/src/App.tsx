@@ -34,7 +34,23 @@ function App() {
         </div>
         <div className='card'>
           <h1 className='title'>زبان انگلیسی</h1>
-          <AnPicker value={date} onChange={handleChange} inputControl={CustomInput} />
+          <AnPicker 
+          value={date} 
+          onChange={handleChange} 
+          inputControl={CustomInput} 
+          locale={{
+            rtl:false,
+            convertToDate:(y,m,d)=>[y,m,d],
+            daysOfEachMonth:(y,m)=>{
+
+              // if (year % 400 === 0) return true;
+// else if (year % 100 === 0) return false;
+// else if (year % 4 === 0) return true;
+// else
+//     return false
+            }
+          }
+          } />
         </div>
       </div>
     </div>

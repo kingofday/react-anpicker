@@ -175,7 +175,7 @@ export const AnPicker = ({
     return (
         <div className={`anpicker ${className}`} ref={anPickerRef} dir={locale.rtl ? "rtl" : "ltr"}>
             {Input ? <Input onChange={handleChange} onFocus={() => toggle(true)} value={valueToShow()} /> : <input value={valueToShow()} onChange={handleChange} onFocus={() => toggle(true)} onBlur={handleBlure} />}
-            {isOpen ? <div className="popup" ref={popupRef} style={popupStyle}>
+            {isOpen ? <div className="popup" ref={popupRef} style={popupStyle} dir={locale.rtl ? "rtl" : "ltr"}>
                 {showSidebar ? <Sidebar locale={locale} localYear={localYear} localMonth={localMonth} localDay={localDay} /> : null}
                 <div className='main'>
                     <div className='selector-heading'>
