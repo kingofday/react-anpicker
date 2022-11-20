@@ -51,6 +51,7 @@ an object that needs to be set if you use another locale, default is been config
 
 ##### gregorian config example
 
+![gregorian image](https://github.com/kingofday/react-anpicker/blob/master/src/assets/gregorian.png)
 for this calander use locale like below:
 ```
 {
