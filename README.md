@@ -48,7 +48,7 @@ import { AnPicker } from 'react-anpicker';
 }
 ```
 an object that needs to be set if you use another locale, default is been configed for "fa-Ir"
-```
+
 ##### gregorian config example
 
 for this calander use locale like below:
