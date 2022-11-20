@@ -96,7 +96,6 @@ export const AnPicker = ({
         return innerValue ? innerValue : (value || changed ? `${localYear}/${localMonth < 10 ? `0${localMonth}` : localMonth}/${localDay < 10 ? `0${localDay}` : localDay}` : "");
     }
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        console.log("handleChange", e.target.value)
         if (!e.target.value) {
             valueChanged(false);
             onChange(null, null);
@@ -132,7 +131,7 @@ export const AnPicker = ({
     useEffect(() => {
         if (!changed) return;
         let date = locale.convertToDate(localYear, localMonth, localDay);
-        onChange(new Date(`${date[0]}/${date[1]}/${date[2]}`), `${localYear}/${localMonth < 10 ? `0${localYear}` : localYear}/${localDay < 10 ? `0${localDay}` : localDay}`);
+        onChange(new Date(`${date[0]}/${date[1]}/${date[2]} 12:00:00:00`), `${localYear}/${localMonth < 10 ? `0${localYear}` : localYear}/${localDay < 10 ? `0${localDay}` : localDay}`);
     }, [localYear, localMonth, localDay]);
     useEffect(() => {
         if (!value) {
@@ -164,7 +163,6 @@ export const AnPicker = ({
     useEffect(() => {
         if (isOpen) {
             const rect = popupRef.current?.getBoundingClientRect();
-            console.log("rect", rect, window.innerWidth)
             if (!rect) return;
             if (rect.x < 0) setPopupStyle({ left: 0 });
             if (rect.x + rect.width > window.innerWidth) {

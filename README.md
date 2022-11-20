@@ -49,7 +49,39 @@ import { AnPicker } from 'react-anpicker';
 ```
 an object that needs to be set if you use another locale, default is been configed for "fa-Ir"
 ```
-##### Todos
+##### gregorian config example
 
- - ltr debguugging with "en-US" locale
+for this calander use locale like below:
+```
+{
+  rtl: false,
+  convertToDate: (y, m, d) => [y, m, d],
+  daysOfEachMonth: (y, m) => {
+    switch (m) {
+      case 1:
+      case 3:
+      case 5:
+      case 6:
+      case 7:
+      case 8:
+      case 10:
+      case 12:
+        return 31;
+      case 2:
+        let isKabise = false;
+        if (y % 400 === 0) isKabise = true;
+        else if (y % 100 === 0) isKabise = false;
+        else if (y % 4 === 0) isKabise = true;
+        return isKabise ? 29 : 28;
+      default:
+        return 30;
+    }
 
+  },
+  name: "en-US",
+  numberConverter: (n) => parseInt(n),
+  startOfWeek:0,
+  title:"Gregorian",
+  todayButtonText:"today"
+}
+```
