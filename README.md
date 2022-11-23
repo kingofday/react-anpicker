@@ -12,14 +12,17 @@ react-anpicker is a free and light component in react for date picker mostly bas
 ## Installation
 
 react-anpicker requires react "^18.2.0", react-dome "^18.2.0" to run.
+
+run this command:
 ```
 npm i react-anpicker
 ```
-### Usage
 add css to your project
 ```
 import "react-anpicker/dist/esm/components/anPicker.css";
 ```
+### Usage
+
 
 ```
 import { AnPicker } from 'react-anpicker';
