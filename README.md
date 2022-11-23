@@ -16,7 +16,10 @@ react-anpicker requires react "^18.2.0", react-dome "^18.2.0" to run.
 npm i react-anpicker
 ```
 ### Usage
-Minimal Usage:
+add css to your project
+```
+import "react-anpicker/dist/esm/components/anPicker.css";
+```
 
 ```
 import { AnPicker } from 'react-anpicker';
