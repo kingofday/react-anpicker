@@ -1,6 +1,6 @@
 {
     "name": "react-anpicker",
-    "version": "1.2.3",
+    "version": "1.2.4",
     "private": false,
     "license": "MIT",
     "main": "./dist/cjs/index.js",
@@ -19,12 +19,12 @@
         "url": "https://github.com/kingofday/react-angrid"
     },
     "scripts": {
-        "build": "yarn sass && yarn build:esm && yarn build:cjs && yarn copy-files",
+        "build": "yarn sass && yarn build:esm && yarn build:cjs && yarn copy-files rm -rf ./dist/",
         "build:esm": "tsc",
         "build:cjs": "tsc --module commonjs --outDir dist/cjs",
         "sass": "sass --no-source-map --style=compressed src/components",
         "clean": "rm -rf ./dist",
-        "copy-files": "copyfiles -f \"./src/**/*.css\" \"dist/esm/components\""
+        "copy-files": "copyfiles -f \"./src/components/**/*.css\" \"dist/esm/components\""
     },
     "peerDependencies": {
         "react": "^18.2.0",

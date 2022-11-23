@@ -5,6 +5,7 @@
 /demo/node_modules
 /demo/build
 /dist
+dist
 ### Linux ###
 *~
 

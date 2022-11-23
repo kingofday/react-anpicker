@@ -1,4 +1,3 @@
-import './anPicker.css';
 import { useState, useEffect, useRef, useLayoutEffect, useMemo, useCallback, ChangeEvent, CSSProperties } from 'react'
 import Days from "./days";
 import { getMonthName, getYear, convertToLocalDate } from "./helpers";
@@ -62,12 +61,15 @@ export const AnPicker = ({
         handleMode(Modes.days);
     }, []);
     const nextYear = () => {
-        setYearPageNumber(y => y + 1);
-        handleMode(Modes.years, true);
+        if (mode === Modes.years)
+            setYearPageNumber(y => y + 1);
+        else setYear(y => y + 1);
+        //handleMode(Modes.years, true);
     }
     const prevYear = () => {
-        setYearPageNumber(y => localYear > 12 ? y - 1 : y);
-        handleMode(Modes.years, true);
+        if (mode === Modes.years)
+            setYearPageNumber(y => localYear > 12 ? y - 1 : y);
+        else setYear(y => y > 1 ? y - 1 : y);
     }
     const nextMonth = () => {
         setMonth(m => m === 12 ? 1 : m + 1);

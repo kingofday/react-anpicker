@@ -10,7 +10,6 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import './anPicker.css';
 import { useState, useEffect, useRef, useLayoutEffect, useMemo, useCallback } from 'react';
 import Days from "./days";
 import { getMonthName, getYear, convertToLocalDate } from "./helpers";
@@ -63,12 +62,17 @@ export var AnPicker = function (_a) {
         handleMode(Modes.days);
     }, []);
     var nextYear = function () {
-        setYearPageNumber(function (y) { return y + 1; });
-        handleMode(Modes.years, true);
+        if (mode === Modes.years)
+            setYearPageNumber(function (y) { return y + 1; });
+        else
+            setYear(function (y) { return y + 1; });
+        //handleMode(Modes.years, true);
     };
     var prevYear = function () {
-        setYearPageNumber(function (y) { return localYear > 12 ? y - 1 : y; });
-        handleMode(Modes.years, true);
+        if (mode === Modes.years)
+            setYearPageNumber(function (y) { return localYear > 12 ? y - 1 : y; });
+        else
+            setYear(function (y) { return y > 1 ? y - 1 : y; });
     };
     var nextMonth = function () {
         setMonth(function (m) { return m === 12 ? 1 : m + 1; });

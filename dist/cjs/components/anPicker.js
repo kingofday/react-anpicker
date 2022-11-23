@@ -16,7 +16,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AnPicker = void 0;
 var jsx_runtime_1 = require("react/jsx-runtime");
-require("./anPicker.css");
 var react_1 = require("react");
 var days_1 = __importDefault(require("./days"));
 var helpers_1 = require("./helpers");
@@ -69,12 +68,17 @@ var AnPicker = function (_a) {
         handleMode(Modes.days);
     }, []);
     var nextYear = function () {
-        setYearPageNumber(function (y) { return y + 1; });
-        handleMode(Modes.years, true);
+        if (mode === Modes.years)
+            setYearPageNumber(function (y) { return y + 1; });
+        else
+            setYear(function (y) { return y + 1; });
+        //handleMode(Modes.years, true);
     };
     var prevYear = function () {
-        setYearPageNumber(function (y) { return localYear > 12 ? y - 1 : y; });
-        handleMode(Modes.years, true);
+        if (mode === Modes.years)
+            setYearPageNumber(function (y) { return localYear > 12 ? y - 1 : y; });
+        else
+            setYear(function (y) { return y > 1 ? y - 1 : y; });
     };
     var nextMonth = function () {
         setMonth(function (m) { return m === 12 ? 1 : m + 1; });
