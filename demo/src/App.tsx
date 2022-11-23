@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { AnPicker } from 'react-anpicker';
 import "./index.css";
-import "react-anpicker/dist/esm/components/an-picker.css";
+import "react-anpicker/dist/anpicker.css";
 const CustomInput = (props: React.InputHTMLAttributes<HTMLInputElement>) => {
   return <input type="text" {...props} style={{ padding: 10, borderRadius: 4, border: "solid 1px #ccc" }} />
 }
