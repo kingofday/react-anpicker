@@ -145,13 +145,18 @@ var AnPicker = function (_a) {
         if (!changed)
             return;
         var date = locale.convertToDate(localYear, localMonth, localDay);
+        if (value) {
+            var eqArr = (0, helpers_1.convertToLocalDate)(value, locale);
+            if (eqArr[0] === localYear && eqArr[1] === localMonth && eqArr[2] === localDay)
+                return;
+        }
         onChange(new Date("".concat(date[0], "/").concat(date[1], "/").concat(date[2], " 12:00:00:00")), "".concat(localYear, "/").concat(localMonth < 10 ? "0".concat(localYear) : localYear, "/").concat(localDay < 10 ? "0".concat(localDay) : localDay));
     }, [localYear, localMonth, localDay]);
     (0, react_1.useEffect)(function () {
         if (!value) {
             if (hadValue) {
                 valueChanged(false);
-                onChange(null, null);
+                //onChange(null, null);
             }
             return;
         }

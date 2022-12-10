@@ -22,6 +22,7 @@ function App() {
         <div className='card'>
           <h1 className='title'>فارسی</h1>
           <button onClick={() => setDate(null)}>remove</button>
+          <button onClick={() => setDate(new Date())}>today</button>
           <AnPicker value={date} onChange={handleChange} showSidebar={true} />
         </div>
         <div className='card'>

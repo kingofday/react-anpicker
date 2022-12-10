@@ -133,13 +133,17 @@ export const AnPicker = ({
     useEffect(() => {
         if (!changed) return;
         let date = locale.convertToDate(localYear, localMonth, localDay);
+        if (value) {
+            const eqArr = convertToLocalDate(value as Date, locale);
+            if (eqArr[0] === localYear && eqArr[1] === localMonth && eqArr[2] === localDay)
+                return;
+        }
         onChange(new Date(`${date[0]}/${date[1]}/${date[2]} 12:00:00:00`), `${localYear}/${localMonth < 10 ? `0${localYear}` : localYear}/${localDay < 10 ? `0${localDay}` : localDay}`);
     }, [localYear, localMonth, localDay]);
     useEffect(() => {
         if (!value) {
             if (hadValue) {
                 valueChanged(false);
-                onChange(null, null);
             }
             return;
         }
