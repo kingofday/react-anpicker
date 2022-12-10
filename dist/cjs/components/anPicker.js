@@ -156,7 +156,6 @@ var AnPicker = function (_a) {
         if (!value) {
             if (hadValue) {
                 valueChanged(false);
-                //onChange(null, null);
             }
             return;
         }
