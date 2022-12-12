@@ -21,15 +21,15 @@ function App() {
       <div className='row' dir='rtl'>
         <div className='card'>
           <h1 className='title'>فارسی</h1>
-          <button onClick={() => setDate(null)}>remove</button>
           <button onClick={() => setDate(new Date())}>today</button>
           <AnPicker value={date} onChange={handleChange} showSidebar={true} />
         </div>
         <div className='card'>
           <h1 className='title'>با اینپوت دلخواه</h1>
+          <button onClick={() => setDate2(null)}>remove</button>
           <AnPicker value={date2} onChange={handleChange2} inputControl={CustomInput} />
         </div>
-        <div className='card'>
+        {/* <div className='card'>
           <h1 className='title'>Gregorian</h1>
           <AnPicker
             value={date}
@@ -67,7 +67,7 @@ function App() {
               todayButtonText:"today"
             }}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );

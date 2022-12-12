@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useLayoutEffect, useMemo, useCallback, ChangeEvent, CSSProperties } from 'react'
+import { useState, useEffect, useRef, useMemo, useCallback, ChangeEvent, CSSProperties } from 'react'
 import Days from "./days";
 import { getMonthName, getYear, convertToLocalDate } from "./helpers";
 import MainProps from "./Models/MainProps";
@@ -35,36 +35,36 @@ export const AnPicker = ({
             return convertToLocalDate(new Date(), locale);
         }
     }, []);
-    const hadValue = useMemo(() => !!value, []);
+    //const hadValue = useMemo(() => !!value, []);
     const [isOpen, toggle] = useState<boolean>(defaultOpen);
     const [localYear, setYear] = useState<number>(init[0]);
     const [localMonth, setMonth] = useState<number>(init[1]);
     const [localDay, setDay] = useState<number>(init[2]);
-    const [changed, valueChanged] = useState<boolean>(false);
+    const changed = useRef(false);
+    //const [changed, valueChanged] = useState<boolean>(false);
     const [mode, setMode] = useState<Modes>(Modes.days);
     const [yearPageNumber, setYearPageNumber] = useState(0);
     const [innerValue, setInnerValue] = useState('');
     const [popupStyle, setPopupStyle] = useState<CSSProperties | undefined>(undefined);
     const onSelectDay = useCallback((dayNumber: number) => {
+        changed.current = true;
         setDay(dayNumber);
-        valueChanged(true);
         toggle(false);
     }, []);
     const onSelectMonth = useCallback((month: number) => {
+        changed.current = true;
         setMonth(month);
-        valueChanged(true);
         handleMode(Modes.days);
     }, []);
     const onSelectYear = useCallback((year: number) => {
+        changed.current = true;
         setYear(year);
-        valueChanged(true);
         handleMode(Modes.days);
     }, []);
     const nextYear = () => {
         if (mode === Modes.years)
             setYearPageNumber(y => y + 1);
         else setYear(y => y + 1);
-        //handleMode(Modes.years, true);
     }
     const prevYear = () => {
         if (mode === Modes.years)
@@ -73,17 +73,17 @@ export const AnPicker = ({
     }
     const nextMonth = () => {
         setMonth(m => m === 12 ? 1 : m + 1);
-        valueChanged(true);
+        changed.current = true;
         handleMode(Modes.days);
     }
     const prevMonth = () => {
         setMonth(m => m === 1 ? 12 : m - 1);
-        valueChanged(true);
+        changed.current = true;
         handleMode(Modes.days);
     }
     const setToday = () => {
         let eqDateArr = convertToLocalDate(new Date(), locale);
-        valueChanged(true);
+        changed.current = true;
         setYear(eqDateArr[0]);
         setMonth(eqDateArr[1]);
         setDay(eqDateArr[2]);
@@ -95,11 +95,12 @@ export const AnPicker = ({
         })
     }, []);
     const valueToShow = () => {
-        return innerValue ? innerValue : (value || changed ? `${localYear}/${localMonth < 10 ? `0${localMonth}` : localMonth}/${localDay < 10 ? `0${localDay}` : localDay}` : "");
+        return innerValue ? innerValue : (value ? `${localYear}/${localMonth < 10 ? `0${localMonth}` : localMonth}/${localDay < 10 ? `0${localDay}` : localDay}` : "");
     }
+
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (!e.target.value) {
-            valueChanged(false);
+            changed.current = false;
             onChange(null, null);
         }
         setInnerValue(e.target.value);
@@ -124,14 +125,14 @@ export const AnPicker = ({
         setYear(y);
         setMonth(m);
         setDay(d);
-        valueChanged(true);
+        changed.current = true;
     }
     useEffect(() => {
         let baseYear = getYear(new Date(), locale.name);
         setYear(locale.numberConverter(baseYear) + yearPageNumber * 12);
     }, [yearPageNumber]);
     useEffect(() => {
-        if (!changed) return;
+        if (!changed.current) return;
         let date = locale.convertToDate(localYear, localMonth, localDay);
         if (value) {
             const eqArr = convertToLocalDate(value as Date, locale);
@@ -142,9 +143,8 @@ export const AnPicker = ({
     }, [localYear, localMonth, localDay]);
     useEffect(() => {
         if (!value) {
-            if (hadValue) {
-                valueChanged(false);
-            }
+            changed.current = false;
+            setInnerValue('');
             return;
         }
         const eqArr = convertToLocalDate(value as Date, locale);
@@ -155,7 +155,7 @@ export const AnPicker = ({
         if (eqArr[2] !== localDay)
             setDay(eqArr[2]);
     }, [value]);
-    useLayoutEffect(() => {
+    useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
             if (!anPickerRef.current?.contains(e.target as Node)) {
                 toggle(false);
@@ -178,7 +178,7 @@ export const AnPicker = ({
     }, [isOpen])
     return (
         <div className={`anpicker ${className}`} ref={anPickerRef} dir={locale.rtl ? "rtl" : "ltr"}>
-            {Input ? <Input onChange={handleChange} onFocus={() => toggle(true)} value={valueToShow()} /> : <input value={valueToShow()} onChange={handleChange} onFocus={() => toggle(true)} onBlur={handleBlure} />}
+            {Input ? <Input onChange={handleChange} onFocus={() => toggle(true)} onBlur={handleBlure} value={valueToShow()} /> : <input value={valueToShow()} onChange={handleChange} onFocus={() => toggle(true)} onBlur={handleBlure} />}
             {isOpen ? <div className="popup" ref={popupRef} style={popupStyle} dir={locale.rtl ? "rtl" : "ltr"}>
                 {showSidebar ? <Sidebar locale={locale} localYear={localYear} localMonth={localMonth} localDay={localDay} /> : null}
                 <div className='main'>
