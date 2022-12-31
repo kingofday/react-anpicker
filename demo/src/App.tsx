@@ -7,7 +7,7 @@ const CustomInput = (props: React.InputHTMLAttributes<HTMLInputElement>) => {
 }
 function App() {
   const [date, setDate] = useState<Date | null>(new Date());
-  const [date2, setDate2] = useState<Date | null>(null);
+  const [date2, setDate2] = useState<Date | null>(new Date());
   const handleChange = (date: Date | null, localDate: string | null) => {
     console.log("after changed1", date)
     setDate(date);

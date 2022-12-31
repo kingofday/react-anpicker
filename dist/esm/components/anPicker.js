@@ -65,14 +65,18 @@ export var AnPicker = function (_a) {
     var nextYear = function () {
         if (mode === Modes.years)
             setYearPageNumber(function (y) { return y + 1; });
-        else
+        else {
+            changed.current = true;
             setYear(function (y) { return y + 1; });
+        }
     };
     var prevYear = function () {
         if (mode === Modes.years)
             setYearPageNumber(function (y) { return localYear > 12 ? y - 1 : y; });
-        else
+        else {
+            changed.current = true;
             setYear(function (y) { return y > 1 ? y - 1 : y; });
+        }
     };
     var nextMonth = function () {
         setMonth(function (m) { return m === 12 ? 1 : m + 1; });
@@ -100,7 +104,6 @@ export var AnPicker = function (_a) {
         });
     }, []);
     var valueToShow = function () {
-        console.log("valueToShow", value, innerValue, changed.current);
         return innerValue ? innerValue : (value ? "".concat(localYear, "/").concat(localMonth < 10 ? "0".concat(localMonth) : localMonth, "/").concat(localDay < 10 ? "0".concat(localDay) : localDay) : "");
     };
     var handleChange = function (e) {
@@ -149,7 +152,6 @@ export var AnPicker = function (_a) {
     }, [localYear, localMonth, localDay]);
     useEffect(function () {
         if (!value) {
-            console.log("empty value");
             changed.current = false;
             setInnerValue('');
             return;

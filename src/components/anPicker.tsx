@@ -64,12 +64,19 @@ export const AnPicker = ({
     const nextYear = () => {
         if (mode === Modes.years)
             setYearPageNumber(y => y + 1);
-        else setYear(y => y + 1);
+        else {
+            changed.current = true;
+            setYear(y => y + 1);
+        }
+        
     }
     const prevYear = () => {
         if (mode === Modes.years)
             setYearPageNumber(y => localYear > 12 ? y - 1 : y);
-        else setYear(y => y > 1 ? y - 1 : y);
+        else {
+            changed.current = true;
+            setYear(y => y > 1 ? y - 1 : y);
+        } 
     }
     const nextMonth = () => {
         setMonth(m => m === 12 ? 1 : m + 1);
