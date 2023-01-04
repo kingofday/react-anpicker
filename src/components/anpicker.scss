@@ -7,7 +7,7 @@
     --bg: #fff;
     --disabledBg: #f0f3fa;
     --fs12: 12px;
-    --btnSize: 34px;
+    --btnSize: 30px;
     position: relative;
     color: var(--text);
     font-size: var(--fs12);
@@ -33,13 +33,13 @@
         .main {
             display: flex;
             flex-direction: column;
-            gap: 7px;
+            gap: 4px;
             min-width: 234px;
             padding: 0 10px;
             .selector-heading {
                 display: flex;
                 justify-content: space-between;
-                height: 44px;
+                height: 34px;
                 svg {
                     path {
                         stroke: var(--text);
@@ -76,7 +76,7 @@
                     th {
                         span {
                             width: 34px;
-                            height: 34px;
+                            height: 30px;
                             display: inline-flex;
                             justify-content: center;
                             align-items: center;
@@ -147,11 +147,17 @@
                 outline: none;
                 border: none;
                 border-top: solid 1px var(--border);
-                height: 44px;
+                height: 34px;
                 display: inline-flex;
                 justify-content: center;
                 align-items: center;
                 cursor: pointer;
+                &:hover{
+                    color:var(--blueHover);
+                }
+                &:active{
+                    color:var(--blueActive);
+                }
             }
         }
         .sidebar {
