@@ -49,8 +49,8 @@ export var AnPicker = function (_a) {
     var _q = useState(undefined), popupStyle = _q[0], setPopupStyle = _q[1];
     var onSelectDay = useCallback(function (dayNumber) {
         changed.current = true;
-        setDay(dayNumber);
         toggle(false);
+        setDay(dayNumber);
     }, []);
     var onSelectMonth = useCallback(function (month) {
         changed.current = true;
@@ -137,7 +137,8 @@ export var AnPicker = function (_a) {
     };
     useEffect(function () {
         var baseYear = getYear(new Date(), locale.name);
-        setYear(locale.numberConverter(baseYear) + yearPageNumber * 12);
+        console.log(baseYear);
+        //setYear(locale.numberConverter(baseYear) + yearPageNumber * 12);
     }, [yearPageNumber]);
     useEffect(function () {
         if (!changed.current)
@@ -148,7 +149,7 @@ export var AnPicker = function (_a) {
             if (eqArr[0] === localYear && eqArr[1] === localMonth && eqArr[2] === localDay)
                 return;
         }
-        onChange(new Date("".concat(date[0], "/").concat(date[1], "/").concat(date[2], " 12:00:00:00")), "".concat(localYear, "/").concat(localMonth < 10 ? "0".concat(localYear) : localYear, "/").concat(localDay < 10 ? "0".concat(localDay) : localDay));
+        onChange(new Date("".concat(date[0], "/").concat(date[1], "/").concat(date[2], " 12:00:00")), "".concat(localYear, "/").concat(localMonth < 10 ? "0".concat(localYear) : localYear, "/").concat(localDay < 10 ? "0".concat(localDay) : localDay));
     }, [localYear, localMonth, localDay]);
     useEffect(function () {
         if (!value) {
@@ -156,7 +157,7 @@ export var AnPicker = function (_a) {
             setInnerValue('');
             return;
         }
-        var eqArr = convertToLocalDate(value, locale);
+        var eqArr = convertToLocalDate(new Date(value), locale);
         if (eqArr[0] !== localYear)
             setYear(eqArr[0]);
         if (eqArr[1] !== localMonth)

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AnPicker } from 'react-anpicker';
+import {AnPicker} from 'react-anpicker';
 import "./index.css";
 import "react-anpicker/dist/anpicker.css";
 const CustomInput = (props: React.InputHTMLAttributes<HTMLInputElement>) => {
@@ -7,8 +7,8 @@ const CustomInput = (props: React.InputHTMLAttributes<HTMLInputElement>) => {
 }
 function App() {
   const [date, setDate] = useState<Date | null>(new Date());
-  const [date2, setDate2] = useState<Date | null>(new Date());
-  const handleChange = (date: Date | null, localDate: string | null) => {
+  const [date2, setDate2] = useState<Date | null>(new Date("2015-11-22 08:00:00"));
+  const handleChange = (date: any, localDate: string | null) => {
     console.log("after changed1", date)
     setDate(date);
   }
@@ -22,7 +22,7 @@ function App() {
         <div className='card'>
           <h1 className='title'>فارسی</h1>
           <button onClick={() => setDate(new Date())}>today</button>
-          <AnPicker value={date} onChange={handleChange} showSidebar={true} />
+          <AnPicker value={date?new Date(date):date} onChange={handleChange} showSidebar={true} />
         </div>
         <div className='card'>
           <h1 className='title'>با اینپوت دلخواه</h1>

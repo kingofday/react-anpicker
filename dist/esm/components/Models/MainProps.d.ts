@@ -1,6 +1,6 @@
 import { ElementType } from "react";
 import Locale from "./Locale";
-declare type CustomInputRequiredProps = {
+type CustomInputRequiredProps = {
     onFocus: React.FocusEventHandler<HTMLInputElement> | undefined;
     value: string | number | readonly string[] | undefined;
     [key: string]: any;

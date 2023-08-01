@@ -81,9 +81,9 @@ export function dateComparer(dt1?: Date, dt2?: Date | [number, number, number]):
     }
 }
 export const convertToLocalDate = (date: Date, locale: Locale): [number, number, number] => {
-    let y = new Intl.DateTimeFormat(locale.name, { year: "numeric" }).format(date);
-    let m = new Intl.DateTimeFormat(locale.name, { month: "numeric" }).format(date);
-    let d = new Intl.DateTimeFormat(locale.name, { day: "numeric" }).format(date);
+    let y = new Intl.DateTimeFormat(locale.name, { year: "numeric" }).format(new Date(date));
+    let m = new Intl.DateTimeFormat(locale.name, { month: "numeric" }).format(new Date(date));
+    let d = new Intl.DateTimeFormat(locale.name, { day: "numeric" }).format(new Date(date));
     return [locale.numberConverter(y), locale.numberConverter(m), locale.numberConverter(d)];
 
 }

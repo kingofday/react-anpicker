@@ -48,8 +48,8 @@ export const AnPicker = ({
     const [popupStyle, setPopupStyle] = useState<CSSProperties | undefined>(undefined);
     const onSelectDay = useCallback((dayNumber: number) => {
         changed.current = true;
-        setDay(dayNumber);
         toggle(false);
+        setDay(dayNumber);
     }, []);
     const onSelectMonth = useCallback((month: number) => {
         changed.current = true;
@@ -134,10 +134,10 @@ export const AnPicker = ({
         setDay(d);
         changed.current = true;
     }
-    useEffect(() => {
-        let baseYear = getYear(new Date(), locale.name);
-        setYear(locale.numberConverter(baseYear) + yearPageNumber * 12);
-    }, [yearPageNumber]);
+    //useEffect(() => {
+        //let baseYear = getYear(new Date(), locale.name);
+        //setYear(locale.numberConverter(baseYear) + yearPageNumber * 12);
+    //}, [yearPageNumber]);
     useEffect(() => {
         if (!changed.current) return;
         let date = locale.convertToDate(localYear, localMonth, localDay);
@@ -146,7 +146,7 @@ export const AnPicker = ({
             if (eqArr[0] === localYear && eqArr[1] === localMonth && eqArr[2] === localDay)
                 return;
         }
-        onChange(new Date(`${date[0]}/${date[1]}/${date[2]} 12:00:00:00`), `${localYear}/${localMonth < 10 ? `0${localYear}` : localYear}/${localDay < 10 ? `0${localDay}` : localDay}`);
+        onChange(new Date(`${date[0]}/${date[1]}/${date[2]} 12:00:00`), `${localYear}/${localMonth < 10 ? `0${localYear}` : localYear}/${localDay < 10 ? `0${localDay}` : localDay}`);
     }, [localYear, localMonth, localDay]);
     useEffect(() => {
         if (!value) {
@@ -154,7 +154,7 @@ export const AnPicker = ({
             setInnerValue('');
             return;
         }
-        const eqArr = convertToLocalDate(value as Date, locale);
+        const eqArr = convertToLocalDate(new Date(value), locale);
         if (eqArr[0] !== localYear)
             setYear(eqArr[0]);
         if (eqArr[1] !== localMonth)

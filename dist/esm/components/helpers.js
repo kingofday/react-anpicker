@@ -81,9 +81,9 @@ export function dateComparer(dt1, dt2) {
     }
 }
 export var convertToLocalDate = function (date, locale) {
-    var y = new Intl.DateTimeFormat(locale.name, { year: "numeric" }).format(date);
-    var m = new Intl.DateTimeFormat(locale.name, { month: "numeric" }).format(date);
-    var d = new Intl.DateTimeFormat(locale.name, { day: "numeric" }).format(date);
+    var y = new Intl.DateTimeFormat(locale.name, { year: "numeric" }).format(new Date(date));
+    var m = new Intl.DateTimeFormat(locale.name, { month: "numeric" }).format(new Date(date));
+    var d = new Intl.DateTimeFormat(locale.name, { day: "numeric" }).format(new Date(date));
     return [locale.numberConverter(y), locale.numberConverter(m), locale.numberConverter(d)];
 };
 export var getAllDays = function (locale, localYear, localMonth) {
