@@ -1,0 +1,254 @@
+@mixin vars {
+    --blue: #448aff;
+    --hover: #f3f5f9;
+    --blueHover: #3d7ce5;
+    --border: #e0e3eb;
+    --text: #323e54;
+    --bg: #fff;
+    --disabledBg: #f0f3fa;
+    --fs12: 12px;
+    --btnSize: 30px;
+    position: relative;
+    color: var(--text);
+    font-size: var(--fs12);
+}
+
+.anpicker {
+    @include vars;
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+
+        td {
+            text-align: center;
+        }
+    }
+
+    input {
+        direction: ltr;
+        text-align: left;
+    }
+}
+
+.anpicker-popup {
+    @include vars;
+    display: flex;
+    position: absolute;
+    background-color: var(--bg);
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    z-index: 999;
+    overflow: hidden;
+
+    .main {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 234px;
+        padding: 0 10px;
+
+        .selector-heading {
+            display: flex;
+            justify-content: space-between;
+            height: 34px;
+
+            svg {
+                path {
+                    stroke: var(--text);
+                }
+            }
+
+            .monthes,
+            .years {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+
+                a {
+                    cursor: pointer;
+                    display: inline-flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 6px;
+                    width: var(--btnSize);
+                    height: var(--btnSize);
+                    color: var(--text);
+
+                    &.prev,
+                    &.next {
+                        &:hover {
+                            background-color: var(--hover);
+                        }
+                    }
+                }
+            }
+        }
+
+        .days {
+            .week {
+                background-color: var(--disabledBg);
+                font-size: var(--fs12);
+                border-radius: 6px;
+
+                th {
+                    span {
+                        width: 34px;
+                        height: 30px;
+                        display: inline-flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                }
+            }
+
+            .day {
+                position: relative;
+
+                button {
+                    width: var(--btnSize);
+                    height: var(--btnSize);
+                }
+
+                &.current:not(.selected) {
+                    color: var(--blue);
+
+                    button {
+                        color: var(--blue);
+                    }
+
+                    &:after {
+                        content: "";
+                        position: absolute;
+                        bottom: 0;
+                        left: 5px;
+                        height: 2px;
+                        background-color: var(--blue);
+                        width: calc(100% - 10px);
+                    }
+                }
+
+                &:not(.selected):not(.current):hover {
+                    button {
+                        background-color: var(--hover);
+                    }
+                }
+            }
+        }
+
+        .years,
+        .monthes {
+            td:not(.selected) {
+                button {
+                    margin: 5px 0;
+                }
+
+                &:hover {
+                    button {
+                        background-color: var(--hover);
+                    }
+                }
+            }
+        }
+
+        .selected {
+            button {
+                background-color: var(--blue);
+                color: var(--bg);
+            }
+        }
+
+        .btn-td {
+            background-color: transparent;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            padding: 5px;
+            border-radius: 6px;
+            width: var(--btnSize);
+            height: var(--btnSize);
+        }
+
+        .today-button {
+            background: transparent;
+            outline: none;
+            border: none;
+            border-top: solid 1px var(--border);
+            height: 34px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+
+            &:hover {
+                color: var(--blueHover);
+            }
+
+            &:active {
+                color: var(--blueActive);
+            }
+        }
+    }
+
+    .sidebar {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background-color: var(--blue);
+        width: 150px;
+        padding: 10px;
+
+        .weekday {
+            background-color: var(--blueHover);
+            color: var(--bg);
+            padding: 3px 10px;
+            border-radius: 6px;
+            text-align: center;
+            line-height: 22px;
+        }
+
+        .month-wrapper,
+        .year-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--bg);
+        }
+
+        .month-wrapper {
+            .day-of-month {
+                font-weight: 700;
+                font-size: 36px;
+                line-height: 46px;
+            }
+
+            .month-name {
+                font-weight: 700;
+                font-size: 13px;
+                line-height: 22px;
+            }
+        }
+
+        .year-wrapper {
+            .year {
+                font-weight: 700;
+                font-size: 13px;
+                line-height: 22px;
+            }
+
+            .locale {
+                font-size: 12px;
+                line-height: 21px;
+            }
+        }
+    }
+
+    @media (max-width: 576px) {
+        .sidebar {
+            display: none;
+        }
+    }
+}

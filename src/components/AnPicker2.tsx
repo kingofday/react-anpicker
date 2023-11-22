@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef, useMemo, useCallback, ChangeEvent, CSSProperties } from 'react'
 import Days from "./days";
-import { getMonthName, getYear, convertToLocalDate } from "./helpers";
+import { getMonthName, convertToLocalDate } from "./helpers";
 import MainProps from "./Models/MainProps";
 import faLocale from "./Locales/faLocale";
-
 import Years from './Years';
 import Monthes from './Monthes';
 import Sidebar from './Sidebar';
 import ChevronIcon from './ChevronIcon';
+import { createPortal } from 'react-dom';
 
 enum Modes {
     days,
@@ -23,10 +23,12 @@ export const AnPicker = ({
     showTodayBottom = true,
     locale = faLocale,
     showSidebar = true,
-    inputControl: Input
+    inputControl: Input,
+    popupTargetId
 }: MainProps): JSX.Element => {
-    const anPickerRef = useRef<HTMLDivElement>(null);
-    const popupRef = useRef<HTMLDivElement>(null);
+    const anPickerRef = useRef<HTMLDivElement | null>(null);
+    const popupRef = useRef<HTMLDivElement | null>(null);
+    const popupTarget = useRef<HTMLElement | null>(null);
     let init = useMemo(() => {
         if (value) {
             return convertToLocalDate(value as Date, locale);
@@ -35,7 +37,11 @@ export const AnPicker = ({
             return convertToLocalDate(new Date(), locale);
         }
     }, []);
-    //const hadValue = useMemo(() => !!value, []);
+    const [position, setPorition] = useState({
+        left: 0,
+        top: 0,
+        width: 0
+    })
     const [isOpen, toggle] = useState<boolean>(defaultOpen);
     const [localYear, setYear] = useState<number>(init[0]);
     const [localMonth, setMonth] = useState<number>(init[1]);
@@ -46,6 +52,11 @@ export const AnPicker = ({
     const [yearPageNumber, setYearPageNumber] = useState(0);
     const [innerValue, setInnerValue] = useState('');
     const [popupStyle, setPopupStyle] = useState<CSSProperties | undefined>(undefined);
+    const setPopupPosition = () => {
+        let rect = anPickerRef.current?.getBoundingClientRect();
+        if (rect)
+            setPorition({ left: rect.left, top: rect.top + rect.height, width: rect.width })
+    }
     const onSelectDay = useCallback((dayNumber: number) => {
         changed.current = true;
         toggle(false);
@@ -68,7 +79,7 @@ export const AnPicker = ({
             changed.current = true;
             setYear(y => y + 1);
         }
-        
+
     }
     const prevYear = () => {
         if (mode === Modes.years)
@@ -76,7 +87,7 @@ export const AnPicker = ({
         else {
             changed.current = true;
             setYear(y => y > 1 ? y - 1 : y);
-        } 
+        }
     }
     const nextMonth = () => {
         setMonth(m => m === 12 ? 1 : m + 1);
@@ -134,10 +145,10 @@ export const AnPicker = ({
         setDay(d);
         changed.current = true;
     }
-    //useEffect(() => {
-        //let baseYear = getYear(new Date(), locale.name);
-        //setYear(locale.numberConverter(baseYear) + yearPageNumber * 12);
-    //}, [yearPageNumber]);
+    const handleFocus = () => {
+        setPopupPosition();
+        toggle(true);
+    }
     useEffect(() => {
         if (!changed.current) return;
         let date = locale.convertToDate(localYear, localMonth, localDay);
@@ -164,15 +175,24 @@ export const AnPicker = ({
     }, [value]);
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
-            if (!anPickerRef.current?.contains(e.target as Node)) {
+            if (!anPickerRef.current?.contains(e.target as Node) && !popupRef.current?.contains(e.target as Node)) {
                 toggle(false);
             }
         }
+        const onScrolled = function () {
+            console.log("scrolled");
+            toggle(false);
+        };
+        document.addEventListener("scroll", onScrolled);
         document.addEventListener("click", handleClickOutside);
         return () => {
+            document.removeEventListener("scroll", onScrolled);
             document.removeEventListener("click", handleClickOutside);
         }
     }, []);
+    useEffect(() => {
+        popupTarget.current = popupTargetId ? document.getElementById(popupTargetId) : document.body;
+    }, [popupTargetId])
     useEffect(() => {
         if (isOpen) {
             const rect = popupRef.current?.getBoundingClientRect();
@@ -185,8 +205,8 @@ export const AnPicker = ({
     }, [isOpen])
     return (
         <div className={`anpicker ${className}`} ref={anPickerRef} dir={locale.rtl ? "rtl" : "ltr"}>
-            {Input ? <Input onChange={handleChange} onFocus={() => toggle(true)} onBlur={handleBlure} value={valueToShow()} /> : <input value={valueToShow()} onChange={handleChange} onFocus={() => toggle(true)} onBlur={handleBlure} />}
-            {isOpen ? <div className="popup" ref={popupRef} style={popupStyle} dir={locale.rtl ? "rtl" : "ltr"}>
+            {Input ? <Input onChange={handleChange} onFocus={handleFocus} onBlur={handleBlure} value={valueToShow()} /> : <input value={valueToShow()} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlure} />}
+            {isOpen ? createPortal(<div className="anpicker-popup" ref={popupRef} style={{ ...position, ...popupStyle }} dir={locale.rtl ? "rtl" : "ltr"}>
                 {showSidebar ? <Sidebar locale={locale} localYear={localYear} localMonth={localMonth} localDay={localDay} /> : null}
                 <div className='main'>
                     <div className='selector-heading'>
@@ -217,7 +237,7 @@ export const AnPicker = ({
                         {locale.todayButtonText}
                     </button>}
                 </div>
-            </div> : null}
+            </div>, popupTarget.current ?? document.body) : null}
         </div>
 
     )

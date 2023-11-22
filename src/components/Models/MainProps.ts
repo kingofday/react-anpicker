@@ -14,4 +14,5 @@ export default interface MainProps {
     showTodayBottom?: boolean;
     locale?: Locale;
     showSidebar?: boolean;
+    popupTargetId?:string
 }

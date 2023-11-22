@@ -19,7 +19,7 @@ npm i react-anpicker
 ```
 add css to your project
 ```
-import "react-anpicker/dist/anpicker.css";
+import "react-anpicker/dist/styles.css";
 ```
 ### Usage
 

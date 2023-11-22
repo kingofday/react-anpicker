@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {AnPicker} from 'react-anpicker';
 import "./index.css";
-import "react-anpicker/dist/anpicker.css";
+import "react-anpicker/dist/styles.css";
 const CustomInput = (props: React.InputHTMLAttributes<HTMLInputElement>) => {
   return <input type="text" {...props} style={{ padding: 10, borderRadius: 4, border: "solid 1px #ccc" }} />
 }
@@ -17,7 +17,7 @@ function App() {
     setDate2(date);
   }
   return (
-    <div className="App" dir='rtl'>
+    <div className="App" dir='rtl' style={{height:1500,overflow:"auto"}}>
       <div className='row' dir='rtl'>
         <div className='card'>
           <h1 className='title'>فارسی</h1>
