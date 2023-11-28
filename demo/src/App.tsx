@@ -25,11 +25,11 @@ function App() {
           <button onClick={() => setDate(new Date())}>today</button>
           <AnPicker value={date ? new Date(date) : date} onChange={handleChange} showSidebar={true} />
         </div>
-        {/* <div className='card'>
+        <div className='card'>
           <h1 className='title'>با اینپوت دلخواه</h1>
           <button onClick={() => setDate2(null)}>remove</button>
           <AnPicker value={date2} onChange={handleChange2} inputControl={CustomInput} />
-        </div> */}
+        </div>
         {/* <div className='card'>
           <h1 className='title'>Gregorian</h1>
           <AnPicker

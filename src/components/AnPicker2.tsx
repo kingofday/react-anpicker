@@ -14,7 +14,19 @@ enum Modes {
     monthes,
     years
 }
-
+// function isMobile() {
+//     if ("navigator" in window && window.navigator.userAgent.match(/Android/i)
+//         || window.navigator.userAgent.match(/webOS/i)
+//         || window.navigator.userAgent.match(/iPhone/i)
+//         || window.navigator.userAgent.match(/iPad/i)
+//         || window.navigator.userAgent.match(/iPod/i)
+//         || window.navigator.userAgent.match(/BlackBerry/i)
+//         || window.navigator.userAgent.match(/Windows Phone/i)) {
+//         return true;
+//     } else {
+//         return false;
+//     }
+// }
 export const AnPicker = ({
     className = '',
     onChange,
@@ -208,8 +220,7 @@ export const AnPicker = ({
             }
         }
         const onScrolled = function () {
-            inputRef.current?.blur?.();
-            toggle(false);
+            adjustPosition();
         };
         document.addEventListener("scroll", onScrolled);
         document.addEventListener("click", handleClickOutside);
