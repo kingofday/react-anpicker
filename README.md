@@ -33,13 +33,14 @@ import { AnPicker } from 'react-anpicker';
 ...
 ```
 #### Props
-- **showTodayBottom:** :boolean- today button be visible or not
-- **defaultOpen:** :boolean- picker be visible at first or not
-- **value:** :Date | null- initital value
-- **onChange:** :(date: Date | null, localDate: string | null) => void- a function that fires after change and gives you eq date and local date
-- **showTodayBottom:** :boolean- today button be visible or not
-- **inputControl:** :ReactElemt- for passing an custom input from other libraries
-- **showSidebar:** :boolean: show sidebar beside picker section
+- **showTodayBottom:** boolean- today button be visible or not
+- **defaultOpen:** boolean- picker be visible at first or not
+- **value:**:Date | null- initital value
+- **onChange:** (date: Date | null, localDate: string | null) => void- a function that fires after change and gives you eq date and local date
+- **showTodayBottom:** boolean- today button be visible or not
+- **inputControl:** ReactElemt- for passing an custom input from other libraries
+- **showSidebar:** boolean: show sidebar beside picker section
+- **popupTargetId:** by defaylt date picker appears as a last child of body, in case like using it in a modal, you can specify wrapper for it.
 - **locale:** :
  ```
 {
