@@ -14,16 +14,8 @@
 }
 
 .anpicker {
+    display: inline-block;
     @include vars;
-
-    table {
-        border-collapse: collapse;
-        width: 100%;
-
-        td {
-            text-align: center;
-        }
-    }
 
     input {
         direction: ltr;
@@ -34,12 +26,21 @@
 .anpicker-popup {
     @include vars;
     display: flex;
-    position: absolute;
+    position: fixed;
     background-color: var(--bg);
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
     border-radius: 6px;
     z-index: 999;
     overflow: hidden;
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+
+        td {
+            text-align: center;
+        }
+    }
 
     .main {
         display: flex;

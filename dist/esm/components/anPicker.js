@@ -41,8 +41,7 @@ export var AnPicker = function (_a) {
     }, []);
     var _j = useState({
         left: 0,
-        top: 0,
-        width: 0
+        top: 0
     }), position = _j[0], setPorition = _j[1];
     var _k = useState(defaultOpen), isOpen = _k[0], toggle = _k[1];
     var _l = useState(init[0]), localYear = _l[0], setYear = _l[1];
@@ -58,7 +57,7 @@ export var AnPicker = function (_a) {
         var _a;
         var rect = (_a = anPickerRef.current) === null || _a === void 0 ? void 0 : _a.getBoundingClientRect();
         if (rect)
-            setPorition({ left: rect.left, top: rect.top + rect.height, width: rect.width });
+            setPorition({ left: rect.left, top: rect.top + rect.height });
     };
     var onSelectDay = useCallback(function (dayNumber) {
         changed.current = true;
