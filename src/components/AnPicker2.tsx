@@ -14,19 +14,19 @@ enum Modes {
     monthes,
     years
 }
-// function isMobile() {
-//     if ("navigator" in window && window.navigator.userAgent.match(/Android/i)
-//         || window.navigator.userAgent.match(/webOS/i)
-//         || window.navigator.userAgent.match(/iPhone/i)
-//         || window.navigator.userAgent.match(/iPad/i)
-//         || window.navigator.userAgent.match(/iPod/i)
-//         || window.navigator.userAgent.match(/BlackBerry/i)
-//         || window.navigator.userAgent.match(/Windows Phone/i)) {
-//         return true;
-//     } else {
-//         return false;
-//     }
-// }
+function isMobile() {
+    if ("navigator" in window && window.navigator.userAgent.match(/Android/i)
+        || window.navigator.userAgent.match(/webOS/i)
+        || window.navigator.userAgent.match(/iPhone/i)
+        || window.navigator.userAgent.match(/iPad/i)
+        || window.navigator.userAgent.match(/iPod/i)
+        || window.navigator.userAgent.match(/BlackBerry/i)
+        || window.navigator.userAgent.match(/Windows Phone/i)) {
+        return true;
+    } else {
+        return false;
+    }
+}
 export const AnPicker = ({
     className = '',
     onChange,
@@ -68,22 +68,19 @@ export const AnPicker = ({
         let left: Pos = "auto";
         let right: Pos = "auto";
         let top: Pos = "auto";
-        if (locale.rtl) {
-            if (popupRect.x < 0) {
-                left = 0;
-                right; "auto";
-            }
-            else {
-                left = locale.rtl ? inputRect.right - popupRect.width : inputRect.left;
-                right = "auto"
-            }
-            if (popupRect.top + popupRect.height > h) {
-                top = inputRect.top - popupRect.height;
-            }
-            else {
-                top = inputRect.top + inputRect.height;
-            }
-
+        if (popupRect.x < 0) {
+            left = 0;
+            right; "auto";
+        }
+        else {
+            left = locale.rtl ? inputRect.right - popupRect.width : inputRect.left;
+            right = "auto"
+        }
+        if (popupRect.top + popupRect.height > h) {
+            top = inputRect.top - popupRect.height;
+        }
+        else {
+            top = inputRect.top + inputRect.height;
         }
         setPopupStyle(({ top, left, right }));
     }
@@ -220,7 +217,12 @@ export const AnPicker = ({
             }
         }
         const onScrolled = function () {
-            adjustPosition();
+            if (isMobile())
+                adjustPosition();
+            else {
+                toggle(false);
+                handleBlure();
+            }
         };
         document.addEventListener("scroll", onScrolled);
         document.addEventListener("click", handleClickOutside);
