@@ -63,24 +63,30 @@ export const AnPicker = ({
     const adjustPosition = () => {
         const inputRect = anPickerRef.current?.getBoundingClientRect();
         const popupRect = popupRef.current?.getBoundingClientRect();
+        const parentRect = popupTarget.current?.getBoundingClientRect();
         if (!popupRect || !inputRect) return;
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const scrollLeft = window.scrollX || document.documentElement.scrollLeft;
+        const inputOffsetTop = anPickerRef.current?.offsetTop ?? 0;
+        const inputOffsetLeft = anPickerRef.current?.offsetLeft ?? 0;
+        const offsetHeight = popupTargetId && popupTarget.current ?popupTarget.current.offsetHeight-popupTarget.current.clientHeight:0
+        const offsetWidth = popupTargetId && popupTarget.current ?popupTarget.current.offsetWidth-popupTarget.current.clientWidth:0
+    
         const h = window.innerHeight;
+        const w = window.innerWidth;
         let left: Pos = "auto";
         let right: Pos = "auto";
         let top: Pos = "auto";
-        if (popupRect.x < 0) {
-            left = 0;
-            right; "auto";
+        left = (popupTargetId && parentRect ? inputOffsetLeft : (inputRect.left + scrollLeft)) - offsetWidth;
+        if (left + popupRect.width > w) {
+            left = "auto";
+            right = 0;
+        }
+        if (inputRect.top + popupRect.height > h) {
+            top = ((popupTargetId && parentRect) ? inputOffsetTop : (inputRect.top + scrollTop)) - popupRect.height - offsetHeight;
         }
         else {
-            left = locale.rtl ? inputRect.right - popupRect.width : inputRect.left;
-            right = "auto"
-        }
-        if (popupRect.top + popupRect.height > h) {
-            top = inputRect.top - popupRect.height;
-        }
-        else {
-            top = inputRect.top + inputRect.height;
+            top = (popupTargetId && parentRect ? inputOffsetTop : (inputRect.top + scrollTop)) + inputRect.height - offsetHeight;
         }
         setPopupStyle(({ top, left, right }));
     }
