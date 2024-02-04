@@ -1,6 +1,11 @@
 import { ComponentType, Ref } from "react";
 import Locale from "./Locale";
-type CustomInputRequiredProps = {
+export declare enum Modes {
+    days = 0,
+    monthes = 1,
+    years = 2
+}
+export type CustomInputRequiredProps = {
     onFocus: React.FocusEventHandler<HTMLInputElement> | undefined;
     value: string | number | readonly string[] | undefined;
     ref?: Ref<any>;
@@ -18,4 +23,3 @@ export default interface MainProps {
     showSidebar?: boolean;
     popupTargetId?: string;
 }
-export {};

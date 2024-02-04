@@ -1,6 +1,11 @@
 import { ComponentType, Ref } from "react";
 import Locale from "./Locale";
-type CustomInputRequiredProps = {
+export enum Modes {
+    days,
+    monthes,
+    years
+}
+export type CustomInputRequiredProps = {
     onFocus: React.FocusEventHandler<HTMLInputElement> | undefined;
     value: string | number | readonly string[] | undefined;
     ref?: Ref<any>;

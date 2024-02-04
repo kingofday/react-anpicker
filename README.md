@@ -34,9 +34,8 @@ import { AnPicker } from 'react-anpicker';
 ```
 #### Props
 - **showTodayBottom:** boolean- today button be visible or not
-- **defaultOpen:** boolean- picker be visible at first or not
-- **value:**:Date | null- initital value
-- **onChange:** (date: Date | null, localDate: string | null) => void- a function that fires after change and gives you eq date and local date
+- **value:**:string includes year/month/day
+- **onChange:** (string) => void- a function that fires after change and gives you value 
 - **showTodayBottom:** boolean- today button be visible or not
 - **inputControl:** ReactElemt- for passing an custom input from other libraries
 - **showSidebar:** boolean: show sidebar beside picker section
