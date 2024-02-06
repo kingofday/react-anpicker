@@ -141,7 +141,6 @@ const useControl = (props: TControlProps) => {
     }, []);
     const handleChange = useCallback((e: any) => {
         const v = e.target.value;
-        console.log("handleChange", v)
         if (!v) {
             props.onChange('');
             return;

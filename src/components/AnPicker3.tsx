@@ -129,7 +129,6 @@ export const AnPicker = ({
             document.removeEventListener("click", handleClickOutside);
         }
     }, []);
-    console.log("state",state)
     return (
         <div className={`anpicker ${className}`} ref={anPickerRef} dir={locale.rtl ? "rtl" : "ltr"}>
             {Input ? <Input ref={inputRef} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlure} value={value ?? ""} /> : <input ref={inputRef} value={value ?? ""} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlure} />}
