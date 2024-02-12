@@ -1,4 +1,4 @@
-import { CSSProperties, MutableRefObject, RefObject, useCallback, useMemo, useReducer } from "react";
+import { CSSProperties, MutableRefObject, RefObject, useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { convertToLocalDate } from "../helpers";
 import Locale from "../Models/Locale";
 import { Modes } from "../Models/MainProps";
@@ -78,21 +78,35 @@ const formatter = (date: { y: number, m: number, d: number }, format?: string) =
     return format ? format.replace("0", date.y.toString()).replace("1", date.m.toString()).replace("2", date.d.toString()) :
         `${date.y}/${date.m}/${date.d}`;
 }
+const getValueDigits = (value: string | null, locale: Locale) => {
+    if (!value)
+        return null;
+    let arr = value?.split('/');
+    if (arr.length !== 3) return null;
+    let y = parseInt(arr[0]);
+    let m = parseInt(arr[1]);
+    let d = parseInt(arr[2]);
+    if (isNaN(y) || isNaN(m) || isNaN(d))
+        return null
+    else if (m < 1 || m > 12) return null;
+    else if (d < 1 || d > locale.daysOfEachMonth(y, m))
+        return null;
+    else return [y, m, d];
+}
 const useControl = (props: TControlProps) => {
     let init = useMemo(() => {
         let res = props.value;
         if (res) {
-            let arr = res.split("/");
-            let y = props.locale.numberConverter(arr[0]);
-            let m = props.locale.numberConverter(arr[1]);
-            let d = props.locale.numberConverter(arr[2]);
-            if (!isNaN(y) && !isNaN(m) && !isNaN(d)) {
-                return [y, m, d];
+            const arr = getValueDigits(res, props.locale);
+            if (!!arr) {
+                return [arr[0], arr[1], arr[2]];
             }
         }
         let dt = convertToLocalDate(new Date(), props.locale);
         return [dt[0], dt[1], dt[2]]
     }, []);
+    const [tempValue, setTempValue] = useState(props.value);
+    const toggleLock = useRef<boolean>(false);
     const [state, dispatch] = useReducer(reducer, {
         mode: Modes.days,
         year: init[0],
@@ -101,60 +115,54 @@ const useControl = (props: TControlProps) => {
         open: false,
         yearPageNumber: 0
     });
-    const handleFocus = () => {
-        let inputRect = props.anPickerRef.current?.getBoundingClientRect();
-        if (inputRect)
-            setPopupStyles({
-                left: props.locale.rtl ? "auto" : inputRect.left,
-                right: props.locale.rtl ? window.innerWidth - inputRect.right : "auto",
-                top: inputRect.top + inputRect.height,
-            })
+    const handleFocus = (e: any) => {
+        e.stopPropagation();
+        if (toggleLock.current) return;
+        toggleLock.current = true;
+        setTimeout(() => toggleLock.current = false, 1000);
         toggle(true);
     }
     const handleBlure = () => {
-        if (!props.value) {
+        if (!props.value || toggleLock.current) {
             return;
         }
-        let arr = props.value.split('/');
-        if (arr.length !== 3) {
-            return;
-        }
-        let y = props.locale.numberConverter(arr[0]);
-        let m = props.locale.numberConverter(arr[1]);
-        let d = props.locale.numberConverter(arr[2]);
-        if (isNaN(y) || isNaN(m) || isNaN(d)) {
+        let arr = getValueDigits(props.value, props.locale);
+        if (!arr) {
             return;
         }
         dispatch({
             type: ControlActionTypeEnum.setInnerValue, payload: {
-                y,
-                m,
-                d
+                y: arr[0],
+                m: arr[1],
+                d: arr[2]
             }
         });
     }
     const toggle = useCallback((open: boolean) => {
         dispatch({ type: ControlActionTypeEnum.toggle, payload: open });
+        // setPopupStyles({
+        //     left:input
+        // })
     }, []);
     const setPopupStyles = useCallback((styles: CSSProperties) => {
         dispatch({ type: ControlActionTypeEnum.setPopupStyles, payload: styles });
     }, []);
     const handleChange = useCallback((e: any) => {
         const v = e.target.value;
+        setTempValue(v);
+        toggle(false);
         if (!v) {
             props.onChange('');
             return;
         }
-        let arr = v.split(props.value);
-        let y = props.locale.numberConverter(arr[0]);
-        let m = props.locale.numberConverter(arr[1]);
-        let d = props.locale.numberConverter(arr[2]);
-        props.onChange(`${y}/${m}/${d}`);
+        let arr = getValueDigits(v, props.locale);
+        if (!arr) return;
+        props.onChange(`${arr[0]}/${arr[1]}/${arr[2]}`);
         dispatch({
             type: ControlActionTypeEnum.setInnerValue, payload: {
-                y,
-                m,
-                d
+                y: arr[0],
+                m: arr[1],
+                d: arr[2]
             }
         });
     }, []);
@@ -220,8 +228,34 @@ const useControl = (props: TControlProps) => {
         }));
         toggle(false);
     }
+    useEffect(() => {
+        if (props.value !== tempValue) {
+            if (!props.value) {
+                setTempValue('');
+                return;
+            }
+            const arr = getValueDigits(props.value, props.locale)
+            if (!!arr) {
+                let v = formatter({
+                    y: arr[0],
+                    m: arr[1],
+                    d: arr[2]
+                });
+                setTempValue(v);
+                dispatch({
+                    type: ControlActionTypeEnum.setInnerValue, payload: {
+                        y: arr[0],
+                        m: arr[1],
+                        d: arr[2]
+                    }
+                });
+
+            }
+        }
+    }, [props.value])
     return {
         state,
+        tempValue,
         toggle,
         setPopupStyles,
         handleFocus,

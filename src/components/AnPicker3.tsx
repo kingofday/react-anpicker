@@ -49,6 +49,7 @@ export const AnPicker = ({
     const popupTarget = useRef<HTMLElement | null>(null);
     const {
         state,
+        tempValue,
         toggle,
         handleFocus,
         handleBlure,
@@ -79,7 +80,7 @@ export const AnPicker = ({
         const scrollLeft = window.scrollX || document.documentElement.scrollLeft;
         const inputOffsetTop = anPickerRef.current?.offsetTop ?? 0;
         const inputOffsetLeft = anPickerRef.current?.offsetLeft ?? 0;
-        const offsetHeight = popupTargetId && popupTarget.current ? popupTarget.current.offsetHeight - popupTarget.current.clientHeight : 0
+        //const offsetHeight = popupTargetId && popupTarget.current ? popupTarget.current.offsetHeight - popupTarget.current.clientHeight : 0
         const offsetWidth = popupTargetId && popupTarget.current ? popupTarget.current.offsetWidth - popupTarget.current.clientWidth : 0
 
         const h = window.innerHeight;
@@ -87,22 +88,43 @@ export const AnPicker = ({
         let left: Pos = "auto";
         let right: Pos = "auto";
         let top: Pos = "auto";
-        left = (popupTargetId && parentRect ? inputOffsetLeft : (inputRect.left + scrollLeft)) - offsetWidth;
-        if (left + popupRect.width > w) {
-            left = "auto";
-            right = 0;
-        }
-        if (inputRect.top + popupRect.height > h) {
-            top = ((popupTargetId && parentRect) ? inputOffsetTop : (inputRect.top + scrollTop)) - popupRect.height - offsetHeight;
+        if (popupTargetId && parentRect) {
+            if (inputOffsetLeft - offsetWidth + parentRect.left + popupRect.width > w) {
+                left = "auto";
+                right = 0;
+            }
+            else {
+                left = inputOffsetLeft - offsetWidth;
+            }
+            top = inputOffsetTop + parentRect.top + popupRect.height + inputRect.height > h ?
+                (inputOffsetTop - popupRect.height) : inputOffsetTop + inputRect.height;
         }
         else {
-            top = (popupTargetId && parentRect ? inputOffsetTop : (inputRect.top + scrollTop)) + inputRect.height - offsetHeight;
+            if (inputRect.left + scrollLeft + popupRect.width > w) {
+                left = inputRect.right - popupRect.width;
+            }
+            else {
+                left = inputRect.left + scrollLeft;
+            }
+            top = (inputRect.top + inputRect.height + popupRect.height > h ?
+                inputRect.top - popupRect.height : inputRect.top + inputRect.height) + scrollTop;
         }
-        setPopupStyles(({ top, left, right }));
+        // if (left + popupRect.width > w) {
+        //     left = "auto";
+        //     right = 0;
+        // }
+        //left = (popupTargetId && parentRect ? inputOffsetLeft : ()) - offsetWidth;
+        // if (inputRect.top + popupRect.height > h) {
+        //     top = ((popupTargetId && parentRect) ? inputOffsetTop : (inputRect.top + scrollTop)) - popupRect.height - offsetHeight;
+        // }
+        // else {
+        //     top = (popupTargetId && parentRect ? inputOffsetTop : (inputRect.top + scrollTop)) + inputRect.height;// - offsetHeight;
+        // }
+        setPopupStyles(({ top, left, right, position: "absolute", visibility: "visible" }));
     }
-    useLayoutEffect(() => {
+    useEffect(() => {
         if (state.open) {
-            adjustPosition();
+             adjustPosition();
         }
     }, [state.open])
     useLayoutEffect(() => {
@@ -131,7 +153,7 @@ export const AnPicker = ({
     }, []);
     return (
         <div className={`anpicker ${className}`} ref={anPickerRef} dir={locale.rtl ? "rtl" : "ltr"}>
-            {Input ? <Input ref={inputRef} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlure} value={value ?? ""} /> : <input ref={inputRef} value={value ?? ""} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlure} />}
+            {Input ? <Input ref={inputRef} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlure} value={tempValue ?? ""} /> : <input ref={inputRef} value={tempValue ?? ""} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlure} />}
             {state.open ? createPortal(<div className="anpicker-popup"
                 ref={popupRef}
                 style={state.popupStyle}
