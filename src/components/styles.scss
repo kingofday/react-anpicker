@@ -1,30 +1,46 @@
 @mixin vars {
-    --blue: #448aff;
-    --hover: #f3f5f9;
-    --blueHover: #3d7ce5;
-    --border: #e0e3eb;
-    --text: #323e54;
-    --bg: #fff;
-    --disabledBg: #f0f3fa;
-    --fs12: 12px;
+    --hover: rgb(243, 245, 249);
+    --border: rgb(224, 227, 235);
+    --bg: rgb(255, 255, 255);
+    --disabledBg: rgb(240, 243, 250);
+    --text: rgb(50, 62, 84);
+    //=== co colors
+    --textBtn: rgb(255,255,255);
+    --blue: rgb(41, 98, 255);
+    --blueHover: rgb(36, 86, 224);
     --btnSize: 30px;
-    position: relative;
-    color: var(--text);
-    font-size: var(--fs12);
+    --fs: 0.75rem;
 }
 
 .anpicker {
     display: inline-block;
     @include vars;
+    position: relative;
+    color: var(--text);
+    font-size: var(--fs);
 
     input {
         direction: ltr;
         text-align: left;
     }
+
+}
+
+.dark {
+    .anpicker {
+        --text: rgb(209, 212, 220);
+        --hover: rgb(47, 50, 65);
+        --border: rgb(67, 70, 81);
+        --bg: rgb(19, 23, 34);
+        --disabledBg: rgb(42, 46, 57);
+    }
 }
 
 .anpicker-popup {
     @include vars;
+    position: relative;
+    color: var(--text);
+    font-size: .75rem;
     display: flex;
     position: fixed;
     visibility: hidden;
@@ -94,7 +110,7 @@
         .days {
             .week {
                 background-color: var(--disabledBg);
-                font-size: var(--fs12);
+                font-size: var(--fs);
                 border-radius: 6px;
 
                 th {
@@ -160,11 +176,12 @@
         .selected {
             button {
                 background-color: var(--blue);
-                color: var(--bg);
+                color: var(--textBtn);
             }
         }
 
         .btn-td {
+            color: var(--text);
             background-color: transparent;
             border: none;
             outline: none;
@@ -209,7 +226,7 @@
 
         .weekday {
             background-color: var(--blueHover);
-            color: var(--bg);
+            color: var(--textBtn);
             padding: 3px 10px;
             border-radius: 6px;
             text-align: center;
@@ -221,7 +238,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            color: var(--bg);
+            color: var(--textBtn);
         }
 
         .month-wrapper {
@@ -256,5 +273,14 @@
         .sidebar {
             display: none;
         }
+    }
+}
+.dark {
+    .anpicker-popup {
+        --text: rgb(209, 212, 220);
+        --hover: rgb(47, 50, 65);
+        --border: rgb(67, 70, 81);
+        --bg: rgb(19, 23, 34);
+        --disabledBg: rgb(42, 46, 57);
     }
 }

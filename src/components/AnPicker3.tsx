@@ -109,17 +109,6 @@ export const AnPicker = ({
             top = (inputRect.top + inputRect.height + popupRect.height > h ?
                 inputRect.top - popupRect.height : inputRect.top + inputRect.height) + scrollTop;
         }
-        // if (left + popupRect.width > w) {
-        //     left = "auto";
-        //     right = 0;
-        // }
-        //left = (popupTargetId && parentRect ? inputOffsetLeft : ()) - offsetWidth;
-        // if (inputRect.top + popupRect.height > h) {
-        //     top = ((popupTargetId && parentRect) ? inputOffsetTop : (inputRect.top + scrollTop)) - popupRect.height - offsetHeight;
-        // }
-        // else {
-        //     top = (popupTargetId && parentRect ? inputOffsetTop : (inputRect.top + scrollTop)) + inputRect.height;// - offsetHeight;
-        // }
         setPopupStyles(({ top, left, right, position: "absolute", visibility: "visible" }));
     }
     useEffect(() => {
