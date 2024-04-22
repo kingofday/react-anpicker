@@ -203,15 +203,17 @@ const useControl = (props: TControlProps) => {
         dispatch({ type: ControlActionTypeEnum.prevYear });
     }, [])
     const nextMonth = useCallback(() => {
+        console.log("next")
         dispatch({ type: ControlActionTypeEnum.setDay, payload: 1 });
         dispatch({ type: ControlActionTypeEnum.setMonth, payload: state.month === 12 ? 1 : state.month + 1 });
         dispatch({ type: ControlActionTypeEnum.setMode, payload: Modes.days });
-    }, [])
+    }, [state.month])
     const prevMonth = useCallback(() => {
+        console.log("next")
         dispatch({ type: ControlActionTypeEnum.setDay, payload: 1 });
         dispatch({ type: ControlActionTypeEnum.setMonth, payload: state.month === 1 ? 12 : state.month - 1 });
         dispatch({ type: ControlActionTypeEnum.setMode, payload: Modes.days });
-    }, [])
+    }, [state.month])
     const setToday = () => {
         let eqDateArr = convertToLocalDate(new Date(), props.locale);
         dispatch({

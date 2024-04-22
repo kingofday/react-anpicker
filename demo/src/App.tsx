@@ -2,12 +2,12 @@ import React, { Ref, forwardRef, useRef, useState } from 'react';
 import { AnPicker } from 'react-anpicker';
 import "./index.css";
 import "react-anpicker/dist/styles.css";
-const CustomInput = forwardRef((props: React.InputHTMLAttributes<HTMLInputElement>, ref: Ref<any>) => {
-  return <input ref={ref} type="text" {...props} style={{ padding: 10, borderRadius: 4, border: "solid 1px #ccc" }} />
-})
+import CustomDT from './CustomDT';
+
 function App() {
-  const [date, setDate] = useState<string>("1402/11/11");
+  const [date, setDate] = useState<string>("1403/03/01");
   const [date2, setDate2] = useState<string>("");
+
   const handleChange = (date: string) => {
     console.log("date", date)
     setDate(date);
@@ -17,7 +17,7 @@ function App() {
     setDate2(date);
   }
   return (
-    <div className="App" dir='rtl' style={{ height: 1500, overflow: "auto", paddingTop: 600 }}>
+    <div className="App" dir='rtl' style={{ overflow: "auto", paddingTop: 600 }}>
       <div className='row' dir='rtl'>
         <div className='card'>
           <h1 className='title'>فارسی</h1>
@@ -25,20 +25,27 @@ function App() {
         </div>
       </div>
       <div className='card' style={{
-        display: "flex",
+        display: "block",
         position: "absolute",
-        left: "30%",
-        top: "300px"
+        left: 50,
+        top: 50,
+        margin: 200,
+        background: "#eee",
+        width: 300,
+        height: 450,
+        overflow: "auto"
       }} id="modal">
-        <h1 className='title'>با اینپوت دلخواه</h1>
-        <button onClick={() => setDate2('')}>remove</button>
-        <AnPicker popupTargetId='modal' value={date2} onChange={handleChange2} inputControl={CustomInput} />
-        <AnPicker popupTargetId='modal' value={date2} onChange={handleChange2} inputControl={CustomInput} />
-      </div>
-      <div id="test" style={{ height: 400, width: 1000, overflow: "auto", position: "relative" }}>
-        <div style={{ margin: "100px 0" }}>
-          <AnPicker popupTargetId='test' value={date} onChange={handleChange} showSidebar={true} />
+        <div style={{ height: 300 }}></div>
+        <div style={{ whiteSpace: "nowrap" }}>
+          <div style={{ width: 300, display: "inline-block" }}>.</div>
+          <div style={{ display: "inline-block" }}>
+            <h1 className='title'>با اینپوت دلخواه</h1>
+            <button onClick={() => setDate2('')}>remove</button>
+            <CustomDT value={date2} onChange={handleChange2} popupTargetId={"modal"} />
+          </div>
+          <div style={{ width: 10, display: "inline-block" }}>.</div>
         </div>
+        <div style={{ height: 400 }}></div>
       </div>
     </div>
   );

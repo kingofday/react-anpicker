@@ -5,7 +5,7 @@
     --disabledBg: rgb(240, 243, 250);
     --text: rgb(50, 62, 84);
     //=== co colors
-    --textBtn: rgb(255,255,255);
+    --textBtn: rgb(255, 255, 255);
     --blue: rgb(41, 98, 255);
     --blueHover: rgb(36, 86, 224);
     --btnSize: 30px;
@@ -130,6 +130,7 @@
                 button {
                     width: var(--btnSize);
                     height: var(--btnSize);
+                    font-family: inherit;
                 }
 
                 &.current:not(.selected) {
@@ -163,6 +164,7 @@
             td:not(.selected) {
                 button {
                     margin: 5px 0;
+                    font-family: inherit;
                 }
 
                 &:hover {
@@ -193,6 +195,7 @@
             border-radius: 6px;
             min-width: var(--btnSize);
             height: var(--btnSize);
+            font-family: inherit;
         }
 
         .today-button {
@@ -205,6 +208,7 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
+            color: var(--text);
 
             &:hover {
                 color: var(--blueHover);
@@ -275,6 +279,7 @@
         }
     }
 }
+
 .dark {
     .anpicker-popup {
         --text: rgb(209, 212, 220);

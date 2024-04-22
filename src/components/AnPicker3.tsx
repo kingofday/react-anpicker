@@ -74,30 +74,42 @@ export const AnPicker = ({
     const adjustPosition = () => {
         const inputRect = anPickerRef.current?.getBoundingClientRect();
         const popupRect = popupRef.current?.getBoundingClientRect();
+        const parent = popupTargetId ? document.getElementById(popupTargetId) : null;
         const parentRect = popupTarget.current?.getBoundingClientRect();
         if (!popupRect || !inputRect) return;
         const scrollTop = window.scrollY || document.documentElement.scrollTop;
         const scrollLeft = window.scrollX || document.documentElement.scrollLeft;
         const inputOffsetTop = anPickerRef.current?.offsetTop ?? 0;
         const inputOffsetLeft = anPickerRef.current?.offsetLeft ?? 0;
+        const topScroll = popupTargetId && popupTarget.current ? popupTarget.current.scrollTop : scrollTop;
+        const leftScroll = popupTargetId && popupTarget.current ? popupTarget.current.scrollLeft : scrollLeft;
+        const visibleTopOffset = inputOffsetTop - topScroll;
+        const visibleLeftOffset = inputOffsetLeft - leftScroll;
+        const popupHeight = 230 + (showTodayBottom ? 38 : 0);
+        const popupWidth = 272 + (showSidebar ? 170 : 0);
         //const offsetHeight = popupTargetId && popupTarget.current ? popupTarget.current.offsetHeight - popupTarget.current.clientHeight : 0
         const offsetWidth = popupTargetId && popupTarget.current ? popupTarget.current.offsetWidth - popupTarget.current.clientWidth : 0
-
         const h = window.innerHeight;
         const w = window.innerWidth;
         let left: Pos = "auto";
         let right: Pos = "auto";
         let top: Pos = "auto";
         if (popupTargetId && parentRect) {
-            if (inputOffsetLeft - offsetWidth + parentRect.left + popupRect.width > w) {
-                left = "auto";
-                right = 0;
+            const verticallScrollWidth = parent ? (parent?.offsetWidth - parent?.clientWidth) : 0;
+            if (visibleLeftOffset >= popupWidth) {
+                left = inputOffsetLeft - offsetWidth;
+                right = "auto";
             }
             else {
-                left = inputOffsetLeft - offsetWidth;
+                left = inputOffsetLeft - verticallScrollWidth;
+                right = "auto";
             }
-            top = inputOffsetTop + parentRect.top + popupRect.height + inputRect.height > h ?
-                (inputOffsetTop - popupRect.height) : inputOffsetTop + inputRect.height;
+            if (visibleTopOffset >= popupHeight) {
+                top = inputOffsetTop - popupRect.height;
+            }
+            else {
+                top = inputOffsetTop + inputRect.height;
+            }
         }
         else {
             if (inputRect.left + scrollLeft + popupRect.width > w) {
@@ -113,7 +125,7 @@ export const AnPicker = ({
     }
     useEffect(() => {
         if (state.open) {
-             adjustPosition();
+            adjustPosition();
         }
     }, [state.open])
     useLayoutEffect(() => {
