@@ -8,8 +8,8 @@ function App() {
   const [date, setDate] = useState<string>("1403/03/01");
   const [date2, setDate2] = useState<string>("");
 
-  const handleChange = (date: string, engDate?: [number, number, number]) => {
-    console.log("date", date, engDate);
+  const handleChange = (date: string, gregorianDate?: [number, number, number]) => {
+    console.log("date", date, gregorianDate);
     setDate(date);
   };
   const handleChange2 = (date: string, engDate?: [number, number, number]) => {
