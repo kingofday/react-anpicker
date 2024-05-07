@@ -34,7 +34,7 @@ export const AnPicker = ({
     inputControl: Input,
     popupTargetId
 }: {
-    onChange: (date: string) => void,
+    onChange: (date: string,gregorianDate?:[number,number,number]) => void,
     value: string;
     className?: string;
     inputControl?: ComponentType<CustomInputRequiredProps>;

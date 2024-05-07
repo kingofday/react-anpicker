@@ -1,47 +1,59 @@
-import React, { Ref, forwardRef, useRef, useState } from 'react';
-import { AnPicker } from 'react-anpicker';
+import React, { Ref, forwardRef, useRef, useState } from "react";
+import { AnPicker } from "react-anpicker";
 import "./index.css";
 import "react-anpicker/dist/styles.css";
-import CustomDT from './CustomDT';
+import CustomDT from "./CustomDT";
 
 function App() {
   const [date, setDate] = useState<string>("1403/03/01");
   const [date2, setDate2] = useState<string>("");
 
-  const handleChange = (date: string) => {
-    console.log("date", date)
+  const handleChange = (date: string, engDate?: [number, number, number]) => {
+    console.log("date", date, engDate);
     setDate(date);
-  }
-  const handleChange2 = (date: string) => {
-    console.log("after changed2", date)
+  };
+  const handleChange2 = (date: string, engDate?: [number, number, number]) => {
+    console.log("after changed2", date,engDate);
     setDate2(date);
-  }
+  };
   return (
-    <div className="App" dir='rtl' style={{ overflow: "auto", paddingTop: 600 }}>
-      <div className='row' dir='rtl'>
-        <div className='card'>
-          <h1 className='title'>فارسی</h1>
+    <div
+      className="App"
+      dir="rtl"
+      style={{ overflow: "auto", paddingTop: 600 }}
+    >
+      <div className="row" dir="rtl">
+        <div className="card">
+          <h1 className="title">فارسی</h1>
           <AnPicker value={date} onChange={handleChange} showSidebar={true} />
         </div>
       </div>
-      <div className='card' style={{
-        display: "block",
-        position: "absolute",
-        left: 50,
-        top: 50,
-        margin: 200,
-        background: "#eee",
-        width: 300,
-        height: 450,
-        overflow: "auto"
-      }} id="modal">
+      <div
+        className="card"
+        style={{
+          display: "block",
+          position: "absolute",
+          left: 50,
+          top: 50,
+          margin: 200,
+          background: "#eee",
+          width: 300,
+          height: 450,
+          overflow: "auto",
+        }}
+        id="modal"
+      >
         <div style={{ height: 300 }}></div>
         <div style={{ whiteSpace: "nowrap" }}>
           <div style={{ width: 300, display: "inline-block" }}>.</div>
           <div style={{ display: "inline-block" }}>
-            <h1 className='title'>با اینپوت دلخواه</h1>
-            <button onClick={() => setDate2('')}>remove</button>
-            <CustomDT value={date2} onChange={handleChange2} popupTargetId={"modal"} />
+            <h1 className="title">با اینپوت دلخواه</h1>
+            <button onClick={() => setDate2("")}>remove</button>
+            <CustomDT
+              value={date2}
+              onChange={handleChange2}
+              popupTargetId={"modal"}
+            />
           </div>
           <div style={{ width: 10, display: "inline-block" }}>.</div>
         </div>
