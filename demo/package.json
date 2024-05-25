@@ -13,6 +13,7 @@
     "react": "file:../node_modules/react",
     "react-anpicker": "file:..",
     "react-dom": "file:../node_modules/react-dom",
+    "react-kod": "^1.3.4",
     "react-scripts": "5.0.1",
     "typescript": "^4.8.3",
     "web-vitals": "^2.1.4"

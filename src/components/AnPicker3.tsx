@@ -97,7 +97,7 @@ export const AnPicker = ({
         if (popupTargetId && parentRect) {
             const verticallScrollWidth = parent ? (parent?.offsetWidth - parent?.clientWidth) : 0;
             if (visibleLeftOffset >= popupWidth) {
-                left = inputOffsetLeft - offsetWidth;
+                left = inputOffsetLeft - offsetWidth + (anPickerRef.current?.clientWidth??inputRect.width) - popupWidth;
                 right = "auto";
             }
             else {

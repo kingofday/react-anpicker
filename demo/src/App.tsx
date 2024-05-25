@@ -3,17 +3,21 @@ import { AnPicker } from "react-anpicker";
 import "./index.css";
 import "react-anpicker/dist/styles.css";
 import CustomDT from "./CustomDT";
+import { Modal } from "react-kod";
 
 function App() {
   const [date, setDate] = useState<string>("1403/03/01");
   const [date2, setDate2] = useState<string>("");
-
-  const handleChange = (date: string, gregorianDate?: [number, number, number]) => {
+  const [open, toggle] = useState(false);
+  const handleChange = (
+    date: string,
+    gregorianDate?: [number, number, number]
+  ) => {
     console.log("date", date, gregorianDate);
     setDate(date);
   };
   const handleChange2 = (date: string, engDate?: [number, number, number]) => {
-    console.log("after changed2", date,engDate);
+    console.log("after changed2", date, engDate);
     setDate2(date);
   };
   return (
@@ -22,43 +26,13 @@ function App() {
       dir="rtl"
       style={{ overflow: "auto", paddingTop: 600 }}
     >
-      <div className="row" dir="rtl">
-        <div className="card">
+      <button onClick={()=>toggle(true)}>Open</button>
+      <Modal fullscreen open={open} id="test">
+        <div>
           <h1 className="title">فارسی</h1>
-          <AnPicker value={date} onChange={handleChange} showSidebar={true} />
+          <AnPicker value={date} onChange={handleChange} showSidebar={true} popupTargetId="test-content" />
         </div>
-      </div>
-      <div
-        className="card"
-        style={{
-          display: "block",
-          position: "absolute",
-          left: 50,
-          top: 50,
-          margin: 200,
-          background: "#eee",
-          width: 300,
-          height: 450,
-          overflow: "auto",
-        }}
-        id="modal"
-      >
-        <div style={{ height: 300 }}></div>
-        <div style={{ whiteSpace: "nowrap" }}>
-          <div style={{ width: 300, display: "inline-block" }}>.</div>
-          <div style={{ display: "inline-block" }}>
-            <h1 className="title">با اینپوت دلخواه</h1>
-            <button onClick={() => setDate2("")}>remove</button>
-            <CustomDT
-              value={date2}
-              onChange={handleChange2}
-              popupTargetId={"modal"}
-            />
-          </div>
-          <div style={{ width: 10, display: "inline-block" }}>.</div>
-        </div>
-        <div style={{ height: 400 }}></div>
-      </div>
+      </Modal>
     </div>
   );
 }
