@@ -1,4 +1,4 @@
-import { useRef, useLayoutEffect, ComponentType, useEffect } from 'react'
+import { useRef, ComponentType, useEffect } from 'react'
 import Days from "./days";
 import { getMonthName } from "./helpers";
 import { CustomInputRequiredProps, Modes, Pos } from "./Models/MainProps";
@@ -72,6 +72,7 @@ export const AnPicker = ({
         onChange,
     });
     const adjustPosition = () => {
+        popupTarget.current = popupTargetId ? document.getElementById(popupTargetId) : document.body;
         const inputRect = anPickerRef.current?.getBoundingClientRect();
         const popupRect = popupRef.current?.getBoundingClientRect();
         const parent = popupTargetId ? document.getElementById(popupTargetId) : null;
@@ -128,9 +129,6 @@ export const AnPicker = ({
             adjustPosition();
         }
     }, [state.open])
-    useLayoutEffect(() => {
-        popupTarget.current = popupTargetId ? document.getElementById(popupTargetId) : document.body;
-    }, [popupTargetId])
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
             if (!anPickerRef.current?.contains(e.target as Node) && !popupRef.current?.contains(e.target as Node)) {
