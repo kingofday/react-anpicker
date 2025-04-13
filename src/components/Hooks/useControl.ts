@@ -178,7 +178,7 @@ const useControl = (props: TControlProps) => {
   const setPopupStyles = useCallback((styles: CSSProperties) => {
     dispatch({ type: ControlActionTypeEnum.setPopupStyles, payload: styles });
   }, []);
-  const handleChange = useCallback((e: any) => {
+  const handleChange = (e: any) => {
     const v = e.target.value;
     setTempValue(v);
     toggle(false);
@@ -200,7 +200,7 @@ const useControl = (props: TControlProps) => {
         d: arr[2],
       },
     });
-  }, []);
+  };
   const onSelectYear = (newYear: number) => {
     dispatch({
       type: ControlActionTypeEnum.setYear,
