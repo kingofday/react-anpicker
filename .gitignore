@@ -4,8 +4,7 @@
 ## example package ##
 /demo/node_modules
 /demo/build
-/dist
-.dist
+/dist/
 dist/
 ### Linux ###
 *~
