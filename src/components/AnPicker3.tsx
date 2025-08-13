@@ -72,43 +72,9 @@ export const AnPicker = ({
     value: value,
     onChange,
   });
-  // const findParent = (): HTMLElement | null | undefined => {
-  //   const observer = new IntersectionObserver(
-  //     (entries) => {
-  //       const entry = entries[0];
-  //       if (entry && entry.isIntersecting) {
-  //         adjustPosition();
-  //       }
-  //     },
-  //     {
-  //       root: null,
-  //       threshold: 0.1,
-  //     }
-  //   );
-  //   const inputEl = anPickerRef.current;
-  //   if (inputEl) observer.observe(inputEl);
-
-  //   const scrollableParents: HTMLElement[] = [];
-
-  //   // Find scrollable ancestors and attach scroll event listeners
-  //   let parent = inputEl?.parentElement;
-  //   while (parent) {
-  //     const overflowY = window.getComputedStyle(parent).overflowY;
-  //     if (overflowY === "scroll" || overflowY === "auto") {
-  //       scrollableParents.push(parent);
-  //       parent.addEventListener("scroll", adjustPosition);
-  //     }
-  //     parent = parent.parentElement;
-  //   }
-  // }
   function getRelativeTop(child: HTMLElement, ancestor: HTMLElement) {
     const childRect = child.getBoundingClientRect();
     const ancestorRect = ancestor.getBoundingClientRect();
-    console.log({
-      "childRect.top": childRect.top,
-      "ancestorRect.top": ancestorRect.top,
-      "ancestor.scrollTop": ancestor.scrollTop,
-    });
     return childRect.top - ancestorRect.top + ancestor.scrollTop;
   }
   const adjustPosition = () => {
@@ -120,22 +86,24 @@ export const AnPicker = ({
 
     const inputRect = inputEl.getBoundingClientRect();
     const popupHeight = showTodayBottom ? 300 : 262;
-    const spaceAbove = inputRect.top;
-    const spaceBelow = window.innerHeight - inputRect.bottom;
-
+    const popupWidth = window.outerWidth > 1200 ? 422 : 272;
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
     const scrollLeft = window.scrollX || document.documentElement.scrollLeft;
+    let spaceAbove: number;
+    let spaceBelow: number;
 
+    if (popupParent) {
+      const parentRect = popupParent.getBoundingClientRect();
+      spaceAbove = inputRect.top - parentRect.top;
+      spaceBelow = parentRect.bottom - inputRect.bottom;
+    } else {
+      spaceAbove = inputRect.top;
+      spaceBelow = window.innerHeight - inputRect.bottom;
+    }
     const showAbove = spaceBelow < popupHeight && spaceAbove > popupHeight;
     let top: Pos = "auto";
     if (popupParent) {
       const relativeTop = getRelativeTop(inputEl, popupParent);
-      console.log({
-        relativeTop,
-        popupHeight,
-        inputHeight: inputEl.offsetHeight,
-        showAbove,
-      });
       top = showAbove
         ? relativeTop - popupHeight
         : relativeTop + inputEl.offsetHeight;
@@ -144,25 +112,45 @@ export const AnPicker = ({
         ? inputRect.top - popupHeight + scrollTop
         : inputRect.bottom + scrollTop;
     }
-    // const top = showAbove
-    //   ? inputRect.top - popupHeight + scrollTop
-    //   : inputRect.bottom + scrollTop;
-
-    // RTL/LTR-aware horizontal positioning
     let left: Pos = "auto";
     let right: Pos = "auto";
-
-    if (locale.rtl) {
-      if (popupParent) {
-        const parentRect = popupParent.getBoundingClientRect();
-        const inputRect = inputEl.getBoundingClientRect();
-        right = parentRect.right - inputRect.right;
+    if (popupParent) {
+      const parentRect = popupParent.getBoundingClientRect();
+      if (locale.rtl) {
+        const spaceOnLeft = inputRect.left - parentRect.left + inputRect.width;
+        if (spaceOnLeft >= popupWidth) {
+          right = parentRect.right - inputRect.right;
+        } else {
+          // Not enough space -> align left edge of input with popup's left edge
+          left = inputRect.left - parentRect.left;
+        }
       } else {
-        right = document.documentElement.clientWidth - inputRect.right;
+        // LTR: try aligning left edges first
+        const spaceOnRight = parentRect.right - inputRect.left;
+        if (spaceOnRight >= popupWidth) {
+          left = inputRect.left - parentRect.left;
+        } else {
+          // Not enough space -> align right edge of input with popup's right edge
+          right = parentRect.right - inputRect.right;
+        }
       }
     } else {
-      // Align left edges
-      left = inputRect.left + scrollLeft;
+      // No parent, just use viewport
+      if (locale.rtl) {
+        const spaceOnLeft = inputRect.left;
+        if (spaceOnLeft >= popupWidth) {
+          right = document.documentElement.clientWidth - inputRect.right;
+        } else {
+          left = inputRect.left + scrollLeft;
+        }
+      } else {
+        const spaceOnRight = window.innerWidth - inputRect.left;
+        if (spaceOnRight >= popupWidth) {
+          left = inputRect.left + scrollLeft;
+        } else {
+          right = document.documentElement.clientWidth - inputRect.right;
+        }
+      }
     }
 
     setPopupStyles({

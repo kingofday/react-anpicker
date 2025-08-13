@@ -40,12 +40,14 @@ function App() {
           ref={parentRef}
         >
           <h1 className="title">فارسی</h1>
-          <AnPicker
-            value={date}
-            onChange={handleChange}
-            showSidebar={true}
-            popupParentRef={parentRef}
-          />
+          <div style={{ paddingRight: 440 }}>
+            <AnPicker
+              value={date}
+              onChange={handleChange}
+              showSidebar={true}
+              popupParentRef={parentRef}
+            />
+          </div>
           <div style={{ height: 600 }}></div>
           <AnPicker
             value={date2}
