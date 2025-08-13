@@ -1,4 +1,4 @@
-import { useRef, ComponentType, useEffect } from "react";
+import { useRef, ComponentType, useEffect, RefObject } from "react";
 import Days from "./days";
 import { getMonthName } from "./helpers";
 import { CustomInputRequiredProps, Modes, Pos } from "./Models/MainProps";
@@ -11,21 +11,21 @@ import { createPortal } from "react-dom";
 import useControl from "./Hooks/useControl";
 import Locale from "./Models/Locale";
 
-function isMobile() {
-  if (
-    ("navigator" in window && window.navigator.userAgent.match(/Android/i)) ||
-    window.navigator.userAgent.match(/webOS/i) ||
-    window.navigator.userAgent.match(/iPhone/i) ||
-    window.navigator.userAgent.match(/iPad/i) ||
-    window.navigator.userAgent.match(/iPod/i) ||
-    window.navigator.userAgent.match(/BlackBerry/i) ||
-    window.navigator.userAgent.match(/Windows Phone/i)
-  ) {
-    return true;
-  } else {
-    return false;
-  }
-}
+// function isMobile() {
+//   if (
+//     ("navigator" in window && window.navigator.userAgent.match(/Android/i)) ||
+//     window.navigator.userAgent.match(/webOS/i) ||
+//     window.navigator.userAgent.match(/iPhone/i) ||
+//     window.navigator.userAgent.match(/iPad/i) ||
+//     window.navigator.userAgent.match(/iPod/i) ||
+//     window.navigator.userAgent.match(/BlackBerry/i) ||
+//     window.navigator.userAgent.match(/Windows Phone/i)
+//   ) {
+//     return true;
+//   } else {
+//     return false;
+//   }
+// }
 export const AnPicker = ({
   className = "",
   onChange,
@@ -34,7 +34,7 @@ export const AnPicker = ({
   locale = faLocale,
   showSidebar = true,
   inputControl: Input,
-  popupTargetId,
+  popupParentRef,
 }: {
   onChange: (date: string, gregorianDate?: [number, number, number]) => void;
   value: string;
@@ -43,12 +43,11 @@ export const AnPicker = ({
   showTodayBottom?: boolean;
   locale?: Locale;
   showSidebar?: boolean;
-  popupTargetId?: string;
+  popupParentRef?: RefObject<HTMLElement>;
 }): JSX.Element => {
   const inputRef = useRef<HTMLInputElement>(null);
   const anPickerRef = useRef<HTMLDivElement | null>(null);
   const popupRef = useRef<HTMLDivElement | null>(null);
-  const popupTarget = useRef<HTMLElement | null>(null);
   const {
     state,
     tempValue,
@@ -73,89 +72,154 @@ export const AnPicker = ({
     value: value,
     onChange,
   });
+  // const findParent = (): HTMLElement | null | undefined => {
+  //   const observer = new IntersectionObserver(
+  //     (entries) => {
+  //       const entry = entries[0];
+  //       if (entry && entry.isIntersecting) {
+  //         adjustPosition();
+  //       }
+  //     },
+  //     {
+  //       root: null,
+  //       threshold: 0.1,
+  //     }
+  //   );
+  //   const inputEl = anPickerRef.current;
+  //   if (inputEl) observer.observe(inputEl);
+
+  //   const scrollableParents: HTMLElement[] = [];
+
+  //   // Find scrollable ancestors and attach scroll event listeners
+  //   let parent = inputEl?.parentElement;
+  //   while (parent) {
+  //     const overflowY = window.getComputedStyle(parent).overflowY;
+  //     if (overflowY === "scroll" || overflowY === "auto") {
+  //       scrollableParents.push(parent);
+  //       parent.addEventListener("scroll", adjustPosition);
+  //     }
+  //     parent = parent.parentElement;
+  //   }
+  // }
+  function getRelativeTop(child: HTMLElement, ancestor: HTMLElement) {
+    const childRect = child.getBoundingClientRect();
+    const ancestorRect = ancestor.getBoundingClientRect();
+    console.log({
+      "childRect.top": childRect.top,
+      "ancestorRect.top": ancestorRect.top,
+      "ancestor.scrollTop": ancestor.scrollTop,
+    });
+    return childRect.top - ancestorRect.top + ancestor.scrollTop;
+  }
   const adjustPosition = () => {
-    popupTarget.current = popupTargetId
-      ? document.getElementById(popupTargetId)
-      : document.body;
-    const inputRect = anPickerRef.current?.getBoundingClientRect();
-    const popupRect = popupRef.current?.getBoundingClientRect();
-    const parent = popupTargetId
-      ? document.getElementById(popupTargetId)
-      : null;
-    const parentRect = popupTarget.current?.getBoundingClientRect();
-    if (!popupRect || !inputRect) return;
+    const popupParent = popupParentRef ? popupParentRef.current : null;
+    const inputEl = anPickerRef.current;
+    const popupEl = popupRef.current;
+
+    if (!inputEl || !popupEl) return;
+
+    const inputRect = inputEl.getBoundingClientRect();
+    const popupHeight = showTodayBottom ? 300 : 262;
+    const spaceAbove = inputRect.top;
+    const spaceBelow = window.innerHeight - inputRect.bottom;
+
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
     const scrollLeft = window.scrollX || document.documentElement.scrollLeft;
-    const inputOffsetTop = anPickerRef.current?.offsetTop ?? 0;
-    const inputOffsetLeft = anPickerRef.current?.offsetLeft ?? 0;
-    const topScroll =
-      popupTargetId && popupTarget.current
-        ? popupTarget.current.scrollTop
-        : scrollTop;
-    const leftScroll =
-      popupTargetId && popupTarget.current
-        ? popupTarget.current.scrollLeft
-        : scrollLeft;
-    const visibleTopOffset = inputOffsetTop - topScroll;
-    const visibleLeftOffset =
-      inputOffsetLeft + (anPickerRef.current?.clientWidth ?? 0) - leftScroll;
-    const popupHeight = 230 + (showTodayBottom ? 38 : 0);
-    const popupWidth = 272 + (showSidebar ? 170 : 0);
-    //const offsetHeight = popupTargetId && popupTarget.current ? popupTarget.current.offsetHeight - popupTarget.current.clientHeight : 0
-    const offsetWidth =
-      popupTargetId && popupTarget.current
-        ? popupTarget.current.offsetWidth - popupTarget.current.clientWidth
-        : 0;
-    const h = window.innerHeight;
-    const w = window.innerWidth;
+
+    const showAbove = spaceBelow < popupHeight && spaceAbove > popupHeight;
+    let top: Pos = "auto";
+    if (popupParent) {
+      const relativeTop = getRelativeTop(inputEl, popupParent);
+      console.log({
+        relativeTop,
+        popupHeight,
+        inputHeight: inputEl.offsetHeight,
+        showAbove,
+      });
+      top = showAbove
+        ? relativeTop - popupHeight
+        : relativeTop + inputEl.offsetHeight;
+    } else {
+      top = showAbove
+        ? inputRect.top - popupHeight + scrollTop
+        : inputRect.bottom + scrollTop;
+    }
+    // const top = showAbove
+    //   ? inputRect.top - popupHeight + scrollTop
+    //   : inputRect.bottom + scrollTop;
+
+    // RTL/LTR-aware horizontal positioning
     let left: Pos = "auto";
     let right: Pos = "auto";
-    let top: Pos = "auto";
-    //console.log("top",parentRect,popupTarget.current,scrollTop,topScroll)
-    if (popupTargetId && parentRect) {
-      const verticallScrollWidth = parent
-        ? parent?.offsetWidth - parent?.clientWidth
-        : 0;
-      if (visibleLeftOffset >= popupWidth) {
-        left =
-          inputOffsetLeft -
-          offsetWidth +
-          (anPickerRef.current?.clientWidth ?? inputRect.width) -
-          popupWidth;
-        right = "auto";
+
+    if (locale.rtl) {
+      if (popupParent) {
+        const parentRect = popupParent.getBoundingClientRect();
+        const inputRect = inputEl.getBoundingClientRect();
+        right = parentRect.right - inputRect.right;
       } else {
-        left = inputOffsetLeft - verticallScrollWidth;
-        right = "auto";
-      }
-      if (visibleTopOffset >= popupHeight) {
-        top = inputOffsetTop - popupRect.height;
-      } else {
-        top = inputOffsetTop + inputRect.height;
+        right = document.documentElement.clientWidth - inputRect.right;
       }
     } else {
-      if (inputRect.left + scrollLeft + popupRect.width > w) {
-        left = inputRect.right - popupRect.width;
-      } else {
-        left = inputRect.left + scrollLeft;
-      }
-      top =
-        (inputRect.top + inputRect.height + popupRect.height > h
-          ? inputRect.top - popupRect.height
-          : inputRect.top + inputRect.height) + scrollTop;
+      // Align left edges
+      left = inputRect.left + scrollLeft;
     }
+
     setPopupStyles({
       top,
       left,
       right,
-      position: "absolute",
       visibility: "visible",
     });
   };
+
   useEffect(() => {
-    if (state.open) {
-      adjustPosition();
+    if (!state.open) return;
+
+    // Initial adjustment
+    adjustPosition();
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry && entry.isIntersecting) {
+          adjustPosition();
+        }
+      },
+      {
+        root: null,
+        threshold: 0.1,
+      }
+    );
+
+    const inputEl = anPickerRef.current;
+    if (inputEl) observer.observe(inputEl);
+
+    const scrollableParents: HTMLElement[] = [];
+
+    // Find scrollable ancestors and attach scroll event listeners
+    let parent = inputEl?.parentElement;
+    while (parent) {
+      const overflowY = window.getComputedStyle(parent).overflowY;
+      if (overflowY === "scroll" || overflowY === "auto") {
+        scrollableParents.push(parent);
+        parent.addEventListener("scroll", adjustPosition);
+      }
+      parent = parent.parentElement;
     }
+
+    // Also listen to window scroll
+    window.addEventListener("scroll", adjustPosition, true);
+
+    return () => {
+      if (inputEl) observer.unobserve(inputEl);
+      scrollableParents.forEach((p) => {
+        p.removeEventListener("scroll", adjustPosition);
+      });
+      window.removeEventListener("scroll", adjustPosition, true);
+    };
   }, [state.open]);
+
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -165,17 +229,17 @@ export const AnPicker = ({
         toggle(false);
       }
     };
-    const onScrolled = function () {
-      if (isMobile()) adjustPosition();
-      else {
-        toggle(false);
-        handleBlure();
-      }
-    };
-    document.addEventListener("scroll", onScrolled);
+    // const onScrolled = function () {
+    //   if (isMobile()) adjustPosition();
+    //   else {
+    //     toggle(false);
+    //     handleBlure();
+    //   }
+    // };
+    // document.addEventListener("scroll", onScrolled);
     document.addEventListener("click", handleClickOutside);
     return () => {
-      document.removeEventListener("scroll", onScrolled);
+      //document.removeEventListener("scroll", onScrolled);
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
@@ -279,7 +343,7 @@ export const AnPicker = ({
                 )}
               </div>
             </div>,
-            popupTarget.current ?? document.body
+            popupParentRef?.current ? popupParentRef.current : document.body
           )
         : null}
     </div>

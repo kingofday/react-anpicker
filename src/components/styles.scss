@@ -38,11 +38,10 @@
 
 .anpicker-popup {
     @include vars;
-    position: relative;
     color: var(--text);
     font-size: .75rem;
     display: flex;
-    position: fixed;
+    position: absolute;
     visibility: hidden;
     left: 0;
     top: 0;

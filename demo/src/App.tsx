@@ -7,7 +7,8 @@ import { Modal } from "react-kod";
 
 function App() {
   const [date, setDate] = useState<string>("1403/03/01");
-  const [date2, setDate2] = useState<string>("");
+  const [date2, setDate2] = useState<string>("1404/03/01");
+  const parentRef = useRef<HTMLDivElement>(null);
   const [open, toggle] = useState(false);
   const handleChange = (
     date: string,
@@ -24,13 +25,34 @@ function App() {
     <div
       className="App"
       dir="rtl"
-      style={{ overflow: "auto", paddingTop: 600 }}
+      style={{ overflow: "auto", paddingTop: 600, height: 1000 }}
     >
-      <button onClick={()=>toggle(true)}>Open</button>
-      <Modal fullscreen open={open} id="test">
-        <div>
+      <button style={{ width: 20 }} onClick={() => toggle(true)}>
+        ok
+      </button>
+      <Modal open={open}>
+        <div
+          style={{
+            height: 1400,
+            width: 600,
+            position: "relative",
+          }}
+          ref={parentRef}
+        >
           <h1 className="title">فارسی</h1>
-          <AnPicker value={date} onChange={handleChange} showSidebar={true} popupTargetId="test-content" />
+          <AnPicker
+            value={date}
+            onChange={handleChange}
+            showSidebar={true}
+            popupParentRef={parentRef}
+          />
+          <div style={{ height: 600 }}></div>
+          <AnPicker
+            value={date2}
+            onChange={handleChange2}
+            showSidebar={true}
+            popupParentRef={parentRef}
+          />
         </div>
       </Modal>
     </div>
