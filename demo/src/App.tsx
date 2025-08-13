@@ -32,19 +32,21 @@ function App() {
     <div
       className="App"
       dir="rtl"
-      style={{ overflow: "auto", paddingTop: 600, height: 1000 }}
+      style={{ overflow: "auto", paddingTop: 600 }}
     >
       <AnPicker value={date1} onChange={handleChange1} showSidebar={true} />
+      <div style={{ height: 600 }}></div>
       <AnPicker
         showTodayBottom={false}
         value={date2}
         onChange={handleChange2}
-        showSidebar={true}
+        //showSidebar={true}
       />
+      <div style={{ height: 600 }}></div>
       <button onClick={() => toggle(true)}>Show Modal</button>
       <Modal bodyClass="modal" open={open}>
         <div
-        className=""
+          className=""
           style={{
             width: "100%",
             position: "relative",
@@ -52,13 +54,12 @@ function App() {
           ref={parentRef}
         >
           <h1 className="title">فارسی</h1>
-          <div style={{ display:"flex",justifyContent:"flex-end" }}>
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <CustomDT
               value={date3}
               onChange={handleChange3}
               parentRef={parentRef}
               popupVPosition="top"
-              
             />
           </div>
           <div style={{ height: 600 }}></div>

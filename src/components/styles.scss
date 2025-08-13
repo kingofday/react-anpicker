@@ -1,290 +1,291 @@
 @mixin vars {
-    --hover: rgb(243, 245, 249);
-    --border: rgb(224, 227, 235);
-    --bg: rgb(255, 255, 255);
-    --disabledBg: rgb(240, 243, 250);
-    --text: rgb(50, 62, 84);
-    //=== co colors
-    --textBtn: rgb(255, 255, 255);
-    --blue: rgb(41, 98, 255);
-    --blueHover: rgb(36, 86, 224);
-    --btnSize: 30px;
-    --fs: 0.75rem;
+  --hover: rgb(243, 245, 249);
+  --border: rgb(224, 227, 235);
+  --bg: rgb(255, 255, 255);
+  --disabledBg: rgb(240, 243, 250);
+  --text: rgb(50, 62, 84);
+  //=== co colors
+  --textBtn: rgb(255, 255, 255);
+  --blue: rgb(41, 98, 255);
+  --blueHover: rgb(36, 86, 224);
+  --btnSize: 30px;
+  --fs: 0.75rem;
 }
 
 .anpicker {
-    display: inline-block;
-    @include vars;
-    position: relative;
-    color: var(--text);
-    font-size: var(--fs);
+  display: inline-block;
+  @include vars;
+  position: relative;
+  color: var(--text);
+  font-size: var(--fs);
 
-    input {
-        direction: ltr;
-        text-align: left;
-    }
-
+  input {
+    direction: ltr;
+    text-align: left;
+  }
 }
 
 .dark {
-    .anpicker {
-        --text: rgb(209, 212, 220);
-        --hover: rgb(47, 50, 65);
-        --border: rgb(67, 70, 81);
-        --bg: rgb(19, 23, 34);
-        --disabledBg: rgb(42, 46, 57);
-    }
+  .anpicker {
+    --text: rgb(209, 212, 220);
+    --hover: rgb(47, 50, 65);
+    --border: rgb(67, 70, 81);
+    --bg: rgb(19, 23, 34);
+    --disabledBg: rgb(42, 46, 57);
+  }
 }
 
 .anpicker-popup {
-    @include vars;
-    color: var(--text);
-    font-size: .75rem;
+  @include vars;
+  color: var(--text);
+  font-size: 0.75rem;
+  display: flex;
+  position: absolute;
+  visibility: hidden;
+  left: 0;
+  top: 0;
+  background-color: var(--bg);
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  z-index: 999;
+  overflow: hidden;
+  left: 0;
+  height: fit-content;
+  &.fixed {
+    position: fixed;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+
+    td {
+      text-align: center;
+    }
+  }
+
+  .main {
     display: flex;
-    position: absolute;
-    visibility: hidden;
-    left: 0;
-    top: 0;
-    background-color: var(--bg);
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
-    border-radius: 6px;
-    z-index: 999;
-    overflow: hidden;
-    left: 0;
-    height: fit-content;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 234px;
+    padding: 0 10px;
 
-    table {
-        border-collapse: collapse;
-        width: 100%;
+    .selector-heading {
+      display: flex;
+      justify-content: space-between;
+      height: 34px;
 
-        td {
-            text-align: center;
+      svg {
+        path {
+          stroke: var(--text);
         }
-    }
+      }
 
-    .main {
+      .monthes,
+      .years {
         display: flex;
-        flex-direction: column;
-        gap: 4px;
-        min-width: 234px;
-        padding: 0 10px;
+        align-items: center;
+        gap: 5px;
 
-        .selector-heading {
-            display: flex;
-            justify-content: space-between;
-            height: 34px;
+        a {
+          cursor: pointer;
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 6px;
+          width: var(--btnSize);
+          height: var(--btnSize);
+          color: var(--text);
 
-            svg {
-                path {
-                    stroke: var(--text);
-                }
-            }
-
-            .monthes,
-            .years {
-                display: flex;
-                align-items: center;
-                gap: 5px;
-
-                a {
-                    cursor: pointer;
-                    display: inline-flex;
-                    justify-content: center;
-                    align-items: center;
-                    border-radius: 6px;
-                    width: var(--btnSize);
-                    height: var(--btnSize);
-                    color: var(--text);
-
-                    &.prev,
-                    &.next {
-                        &:hover {
-                            background-color: var(--hover);
-                        }
-                    }
-                }
-            }
-        }
-
-        .days {
-            .week {
-                background-color: var(--disabledBg);
-                font-size: var(--fs);
-                border-radius: 6px;
-
-                th {
-                    span {
-                        width: 34px;
-                        height: 30px;
-                        display: inline-flex;
-                        justify-content: center;
-                        align-items: center;
-                    }
-                }
-            }
-
-            .day {
-                position: relative;
-
-                button {
-                    width: var(--btnSize);
-                    height: var(--btnSize);
-                    font-family: inherit;
-                }
-
-                &.current:not(.selected) {
-                    color: var(--blue);
-
-                    button {
-                        color: var(--blue);
-                    }
-
-                    &:after {
-                        content: "";
-                        position: absolute;
-                        bottom: 0;
-                        left: 5px;
-                        height: 2px;
-                        background-color: var(--blue);
-                        width: calc(100% - 10px);
-                    }
-                }
-
-                &:not(.selected):not(.current):hover {
-                    button {
-                        background-color: var(--hover);
-                    }
-                }
-            }
-        }
-
-        .years,
-        .monthes {
-            td:not(.selected) {
-                button {
-                    margin: 5px 0;
-                    font-family: inherit;
-                }
-
-                &:hover {
-                    button {
-                        background-color: var(--hover);
-                    }
-                }
-            }
-        }
-
-        .selected {
-            button {
-                background-color: var(--blue);
-                color: var(--textBtn);
-            }
-        }
-
-        .btn-td {
-            color: var(--text);
-            background-color: transparent;
-            border: none;
-            outline: none;
-            cursor: pointer;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            padding: 5px;
-            border-radius: 6px;
-            min-width: var(--btnSize);
-            height: var(--btnSize);
-            font-family: inherit;
-        }
-
-        .today-button {
-            background: transparent;
-            outline: none;
-            border: none;
-            border-top: solid 1px var(--border);
-            height: 34px;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            color: var(--text);
-
+          &.prev,
+          &.next {
             &:hover {
-                color: var(--blueHover);
+              background-color: var(--hover);
             }
-
-            &:active {
-                color: var(--blueActive);
-            }
+          }
         }
+      }
     }
 
-    .sidebar {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        background-color: var(--blue);
-        width: 150px;
-        padding: 10px;
+    .days {
+      .week {
+        background-color: var(--disabledBg);
+        font-size: var(--fs);
+        border-radius: 6px;
 
-        .weekday {
-            background-color: var(--blueHover);
-            color: var(--textBtn);
-            padding: 3px 10px;
-            border-radius: 6px;
-            text-align: center;
-            line-height: 22px;
-        }
-
-        .month-wrapper,
-        .year-wrapper {
-            display: flex;
-            flex-direction: column;
+        th {
+          span {
+            width: 34px;
+            height: 30px;
+            display: inline-flex;
+            justify-content: center;
             align-items: center;
-            color: var(--textBtn);
+          }
+        }
+      }
+
+      .day {
+        position: relative;
+
+        button {
+          width: var(--btnSize);
+          height: var(--btnSize);
+          font-family: inherit;
         }
 
-        .month-wrapper {
-            .day-of-month {
-                font-weight: 700;
-                font-size: 36px;
-                line-height: 46px;
-            }
+        &.current:not(.selected) {
+          color: var(--blue);
 
-            .month-name {
-                font-weight: 700;
-                font-size: 13px;
-                line-height: 22px;
-            }
+          button {
+            color: var(--blue);
+          }
+
+          &:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 5px;
+            height: 2px;
+            background-color: var(--blue);
+            width: calc(100% - 10px);
+          }
         }
 
-        .year-wrapper {
-            .year {
-                font-weight: 700;
-                font-size: 13px;
-                line-height: 22px;
-            }
-
-            .locale {
-                font-size: 12px;
-                line-height: 21px;
-            }
+        &:not(.selected):not(.current):hover {
+          button {
+            background-color: var(--hover);
+          }
         }
+      }
     }
 
-    @media (max-width: 576px) {
-        .sidebar {
-            display: none;
+    .years,
+    .monthes {
+      td:not(.selected) {
+        button {
+          margin: 5px 0;
+          font-family: inherit;
         }
+
+        &:hover {
+          button {
+            background-color: var(--hover);
+          }
+        }
+      }
     }
+
+    .selected {
+      button {
+        background-color: var(--blue);
+        color: var(--textBtn);
+      }
+    }
+
+    .btn-td {
+      color: var(--text);
+      background-color: transparent;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      padding: 5px;
+      border-radius: 6px;
+      min-width: var(--btnSize);
+      height: var(--btnSize);
+      font-family: inherit;
+    }
+
+    .today-button {
+      background: transparent;
+      outline: none;
+      border: none;
+      border-top: solid 1px var(--border);
+      height: 34px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      color: var(--text);
+
+      &:hover {
+        color: var(--blueHover);
+      }
+
+      &:active {
+        color: var(--blueActive);
+      }
+    }
+  }
+
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: var(--blue);
+    width: 150px;
+    padding: 10px;
+
+    .weekday {
+      background-color: var(--blueHover);
+      color: var(--textBtn);
+      padding: 3px 10px;
+      border-radius: 6px;
+      text-align: center;
+      line-height: 22px;
+    }
+
+    .month-wrapper,
+    .year-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: var(--textBtn);
+    }
+
+    .month-wrapper {
+      .day-of-month {
+        font-weight: 700;
+        font-size: 36px;
+        line-height: 46px;
+      }
+
+      .month-name {
+        font-weight: 700;
+        font-size: 13px;
+        line-height: 22px;
+      }
+    }
+
+    .year-wrapper {
+      .year {
+        font-weight: 700;
+        font-size: 13px;
+        line-height: 22px;
+      }
+
+      .locale {
+        font-size: 12px;
+        line-height: 21px;
+      }
+    }
+  }
+
+  @media (max-width: 576px) {
+    .sidebar {
+      display: none;
+    }
+  }
 }
 
 .dark {
-    .anpicker-popup {
-        --text: rgb(209, 212, 220);
-        --hover: rgb(47, 50, 65);
-        --border: rgb(67, 70, 81);
-        --bg: rgb(19, 23, 34);
-        --disabledBg: rgb(42, 46, 57);
-    }
+  .anpicker-popup {
+    --text: rgb(209, 212, 220);
+    --hover: rgb(47, 50, 65);
+    --border: rgb(67, 70, 81);
+    --bg: rgb(19, 23, 34);
+    --disabledBg: rgb(42, 46, 57);
+  }
 }

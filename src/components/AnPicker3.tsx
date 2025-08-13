@@ -266,7 +266,7 @@ export const AnPicker = ({
       {state.open
         ? createPortal(
             <div
-              className="anpicker-popup"
+              className={`anpicker-popup${popupParentRef ? "" : " fixed"}`}
               ref={popupRef}
               style={state.popupStyle}
               dir={locale.rtl ? "rtl" : "ltr"}
