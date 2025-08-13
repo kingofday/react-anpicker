@@ -34,7 +34,9 @@ function App() {
       dir="rtl"
       style={{ overflow: "auto", paddingTop: 600 }}
     >
-      <AnPicker value={date1} onChange={handleChange1} showSidebar={true} />
+      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        <AnPicker value={date1} onChange={handleChange1} showSidebar={true} />
+      </div>
       <div style={{ height: 600 }}></div>
       <AnPicker
         showTodayBottom={false}
@@ -59,7 +61,6 @@ function App() {
               value={date3}
               onChange={handleChange3}
               parentRef={parentRef}
-              popupVPosition="top"
             />
           </div>
           <div style={{ height: 600 }}></div>

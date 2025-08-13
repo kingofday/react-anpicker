@@ -133,16 +133,30 @@ export const AnPicker = ({
     let spaceOnLeft: number;
     let spaceOnRight: number;
     if (popupParent) {
-      spaceOnLeft = inputRect.left - parentRect!.left + inputRect.width;
-      spaceOnRight = parentRect!.width - (inputRect.right - parentRect!.left);
+      spaceOnLeft = inputRect.right - parentRect!.left;
+      spaceOnRight = parentRect!.right - inputRect.left;
+      // console.log({
+      //   spaceOnLeft,
+      //   spaceOnRight,
+      //   parentRect: {
+      //     width: parentRect!.width,
+      //     left: parentRect!.left,
+      //     right: parentRect!.right,
+      //   },
+      // });
     } else {
       spaceOnLeft = inputRect.right;
       spaceOnRight = window.innerWidth - inputRect.left;
     }
+    // console.log({
+    //   spaceOnLeft,
+    //   spaceOnRight,
+    // });
     const showRight =
       typeof popupHPosition !== "undefined"
         ? popupHPosition === "left"
         : spaceOnRight > popupWidth && spaceOnLeft < popupWidth;
+    console.log("showRight", showRight);
     // const showOnLeft =
     if (popupParent) {
       if (!showRight) {
