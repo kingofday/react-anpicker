@@ -6,20 +6,27 @@ import CustomDT from "./CustomDT";
 import { Modal } from "react-kod";
 
 function App() {
-  const [date, setDate] = useState<string>("1403/03/01");
+  const [date1, setDate1] = useState<string>("1403/03/01");
   const [date2, setDate2] = useState<string>("1404/03/01");
+  const [date3, setDate3] = useState<string>("1404/03/01");
+  const [date4, setDate4] = useState<string>("1404/03/01");
   const parentRef = useRef<HTMLDivElement>(null);
   const [open, toggle] = useState(false);
-  const handleChange = (
-    date: string,
-    gregorianDate?: [number, number, number]
-  ) => {
-    console.log("date", date, gregorianDate);
-    setDate(date);
+  const handleChange1 = (date: string, engDate?: [number, number, number]) => {
+    console.log("after changed2", date, engDate);
+    setDate1(date);
   };
   const handleChange2 = (date: string, engDate?: [number, number, number]) => {
     console.log("after changed2", date, engDate);
     setDate2(date);
+  };
+  const handleChange3 = (date: string, engDate?: [number, number, number]) => {
+    console.log("after changed2", date, engDate);
+    setDate3(date);
+  };
+  const handleChange4 = (date: string, engDate?: [number, number, number]) => {
+    console.log("after changed2", date, engDate);
+    setDate4(date);
   };
   return (
     <div
@@ -27,10 +34,15 @@ function App() {
       dir="rtl"
       style={{ overflow: "auto", paddingTop: 600, height: 1000 }}
     >
-      <button style={{ width: 20 }} onClick={() => toggle(true)}>
-        ok
-      </button>
-      <Modal open={open}>
+      <AnPicker value={date1} onChange={handleChange1} showSidebar={true} />
+      <AnPicker
+        showTodayBottom={false}
+        value={date2}
+        onChange={handleChange2}
+        showSidebar={true}
+      />
+      <button onClick={() => toggle(true)}>Show Modal</button>
+      <Modal bodyClass="modal" open={open}>
         <div
           style={{
             height: 1400,
@@ -42,16 +54,16 @@ function App() {
           <h1 className="title">فارسی</h1>
           <div style={{ paddingRight: 440 }}>
             <AnPicker
-              value={date}
-              onChange={handleChange}
+              value={date3}
+              onChange={handleChange3}
               showSidebar={true}
               popupParentRef={parentRef}
             />
           </div>
           <div style={{ height: 600 }}></div>
           <AnPicker
-            value={date2}
-            onChange={handleChange2}
+            value={date4}
+            onChange={handleChange4}
             showSidebar={true}
             popupParentRef={parentRef}
           />

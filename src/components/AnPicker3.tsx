@@ -72,11 +72,11 @@ export const AnPicker = ({
     value: value,
     onChange,
   });
-  function getRelativeTop(child: HTMLElement, ancestor: HTMLElement) {
-    const childRect = child.getBoundingClientRect();
-    const ancestorRect = ancestor.getBoundingClientRect();
-    return childRect.top - ancestorRect.top + ancestor.scrollTop;
-  }
+  // function getRelativeTop(child: HTMLElement, ancestor: HTMLElement) {
+  //   const childRect = child.getBoundingClientRect();
+  //   const ancestorRect = ancestor.getBoundingClientRect();
+  //   return childRect.top - ancestorRect.top + ancestor.scrollTop;
+  // }
   const adjustPosition = () => {
     const popupParent = popupParentRef ? popupParentRef.current : null;
     const inputEl = anPickerRef.current;
@@ -85,15 +85,16 @@ export const AnPicker = ({
     if (!inputEl || !popupEl) return;
 
     const inputRect = inputEl.getBoundingClientRect();
-    const popupHeight = showTodayBottom ? 300 : 262;
-    const popupWidth = window.outerWidth > 1200 ? 422 : 272;
+    const mobileMode = document.documentElement.clientWidth < 1200;
+    const popupHeight = 268 - (showTodayBottom ? 6 : 0);
+    const popupWidth = mobileMode ? 272 : 422;
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
     const scrollLeft = window.scrollX || document.documentElement.scrollLeft;
     let spaceAbove: number;
     let spaceBelow: number;
-
+    let parentRect: DOMRect;
     if (popupParent) {
-      const parentRect = popupParent.getBoundingClientRect();
+      parentRect = popupParent.getBoundingClientRect();
       spaceAbove = inputRect.top - parentRect.top;
       spaceBelow = parentRect.bottom - inputRect.bottom;
     } else {
@@ -102,15 +103,21 @@ export const AnPicker = ({
     }
     const showAbove = spaceBelow < popupHeight && spaceAbove > popupHeight;
     let top: Pos = "auto";
+    let bottom: Pos = "auto";
     if (popupParent) {
-      const relativeTop = getRelativeTop(inputEl, popupParent);
-      top = showAbove
-        ? relativeTop - popupHeight
-        : relativeTop + inputEl.offsetHeight;
+      const relativeTop =
+        inputRect.top - parentRect!.top + popupParent.scrollTop;
+      if (showAbove) {
+        bottom = parentRect!.bottom - parentRect!.top + inputRect.width;
+      } else {
+        top = relativeTop + inputEl.offsetHeight;
+      }
     } else {
-      top = showAbove
-        ? inputRect.top - popupHeight + scrollTop
-        : inputRect.bottom + scrollTop;
+      if (showAbove) {
+        bottom = window.innerHeight - inputRect.top + scrollTop;
+      } else {
+        top = inputRect.bottom + scrollTop;
+      }
     }
     let left: Pos = "auto";
     let right: Pos = "auto";
@@ -121,23 +128,19 @@ export const AnPicker = ({
         if (spaceOnLeft >= popupWidth) {
           right = parentRect.right - inputRect.right;
         } else {
-          // Not enough space -> align left edge of input with popup's left edge
           left = inputRect.left - parentRect.left;
         }
       } else {
-        // LTR: try aligning left edges first
         const spaceOnRight = parentRect.right - inputRect.left;
         if (spaceOnRight >= popupWidth) {
           left = inputRect.left - parentRect.left;
         } else {
-          // Not enough space -> align right edge of input with popup's right edge
           right = parentRect.right - inputRect.right;
         }
       }
     } else {
-      // No parent, just use viewport
       if (locale.rtl) {
-        const spaceOnLeft = inputRect.left;
+        const spaceOnLeft = inputRect.right;
         if (spaceOnLeft >= popupWidth) {
           right = document.documentElement.clientWidth - inputRect.right;
         } else {
@@ -155,6 +158,7 @@ export const AnPicker = ({
 
     setPopupStyles({
       top,
+      bottom,
       left,
       right,
       visibility: "visible",

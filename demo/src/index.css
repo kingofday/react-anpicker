@@ -16,3 +16,6 @@ body {
   margin-bottom: 20px;
   font-size: 14px;
 }
+.modal-content{
+  max-height: 100dvh;
+}
