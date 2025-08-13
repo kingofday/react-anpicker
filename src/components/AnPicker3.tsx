@@ -121,7 +121,7 @@ export const AnPicker = ({
       }
     } else {
       if (showAbove) {
-        bottom = window.innerHeight - inputRect.top + scrollTop;
+        bottom = window.innerHeight - inputRect.top;
       } else {
         top = inputRect.bottom + scrollTop;
       }
