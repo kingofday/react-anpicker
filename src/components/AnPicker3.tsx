@@ -108,7 +108,7 @@ export const AnPicker = ({
       const relativeTop =
         inputRect.top - parentRect!.top + popupParent.scrollTop;
       if (showAbove) {
-        bottom = parentRect!.bottom - parentRect!.top + inputRect.width;
+        bottom = parentRect!.bottom - inputRect!.top;
       } else {
         top = relativeTop + inputEl.offsetHeight;
       }

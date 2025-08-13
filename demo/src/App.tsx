@@ -44,15 +44,15 @@ function App() {
       <button onClick={() => toggle(true)}>Show Modal</button>
       <Modal bodyClass="modal" open={open}>
         <div
+        className=""
           style={{
-            height: 1400,
-            width: 600,
+            width: "100%",
             position: "relative",
           }}
           ref={parentRef}
         >
           <h1 className="title">فارسی</h1>
-          <div style={{ paddingRight: 440 }}>
+          <div style={{ display:"flex",justifyContent:"flex-end" }}>
             <AnPicker
               value={date3}
               onChange={handleChange3}

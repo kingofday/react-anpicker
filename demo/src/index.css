@@ -2,7 +2,7 @@ body {
   font-size: 12px;
   margin: 0;
 }
-.row{
+.row {
   display: flex;
 }
 .card {
@@ -16,6 +16,18 @@ body {
   margin-bottom: 20px;
   font-size: 14px;
 }
-.modal-content{
-  max-height: 100dvh;
+.test-wrapper {
+  height: 1400px;
+}
+@media (max-width: 1200px) {
+  .test-wrapper {
+    height: 700px;
+  }
+  .modal-content {
+    max-height: 100dvh;
+    width: 100%;
+  }
+}
+* {
+  box-sizing: border-box;
 }
