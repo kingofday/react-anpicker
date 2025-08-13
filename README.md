@@ -39,7 +39,7 @@ import { AnPicker } from 'react-anpicker';
 - **showTodayBottom:** boolean- today button be visible or not
 - **inputControl:** ReactElemt- for passing an custom input from other libraries
 - **showSidebar:** boolean: show sidebar beside picker section
-- **popupTargetId:** by defaylt date picker appears as a last child of body, in case like using it in a modal, you can specify wrapper for it.
+- **popupParentRef:** by defaylt date picker appears as a last child of body, in case like using it in a modal, you can specify wrapper for it.
 - **locale:** :
  ```
 {
