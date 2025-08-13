@@ -92,7 +92,7 @@ export const AnPicker = ({
     const mobileMode = document.documentElement.clientWidth < 1200;
     const popupHeight = 268 - (showTodayBottom ? 6 : 0);
     const popupWidth = mobileMode ? 272 : 422;
-    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    //const scrollTop = window.scrollY || document.documentElement.scrollTop;
     const scrollLeft = window.scrollX || document.documentElement.scrollLeft;
     let spaceAbove: number;
     let spaceBelow: number;
@@ -123,7 +123,7 @@ export const AnPicker = ({
       if (showAbove) {
         bottom = window.innerHeight - inputRect.top;
       } else {
-        top = inputRect.bottom + scrollTop;
+        top = inputRect.bottom;
       }
     }
     //=== H position
@@ -145,12 +145,10 @@ export const AnPicker = ({
         : spaceOnRight > popupWidth && spaceOnLeft < popupWidth;
     // const showOnLeft =
     if (popupParent) {
-      const parentRect = popupParent.getBoundingClientRect();
-      //const spaceOnLeft = inputRect.left - parentRect.left + inputRect.width;
       if (!showRight) {
-        right = parentRect.right - inputRect.right;
+        right = parentRect!.right - inputRect.right;
       } else {
-        left = inputRect.left - parentRect.left;
+        left = inputRect.left - parentRect!.left;
       }
     } else {
       //const spaceOnLeft = inputRect.right;
