@@ -35,6 +35,8 @@ export const AnPicker = ({
   showSidebar = true,
   inputControl: Input,
   popupParentRef,
+  popupVPosition,
+  popupHPosition,
 }: {
   onChange: (date: string, gregorianDate?: [number, number, number]) => void;
   value: string;
@@ -44,6 +46,8 @@ export const AnPicker = ({
   locale?: Locale;
   showSidebar?: boolean;
   popupParentRef?: RefObject<HTMLElement>;
+  popupVPosition?: "top" | "bottom";
+  popupHPosition?: "left" | "right";
 }): JSX.Element => {
   const inputRef = useRef<HTMLInputElement>(null);
   const anPickerRef = useRef<HTMLDivElement | null>(null);
@@ -101,7 +105,10 @@ export const AnPicker = ({
       spaceAbove = inputRect.top;
       spaceBelow = window.innerHeight - inputRect.bottom;
     }
-    const showAbove = spaceBelow < popupHeight && spaceAbove > popupHeight;
+    const showAbove =
+      typeof popupVPosition !== "undefined"
+        ? popupVPosition === "top"
+        : spaceBelow < popupHeight && spaceAbove > popupHeight;
     let top: Pos = "auto";
     let bottom: Pos = "auto";
     if (popupParent) {
@@ -119,40 +126,38 @@ export const AnPicker = ({
         top = inputRect.bottom + scrollTop;
       }
     }
+    //=== H position
+
     let left: Pos = "auto";
     let right: Pos = "auto";
+    let spaceOnLeft: number;
+    let spaceOnRight: number;
+    if (popupParent) {
+      spaceOnLeft = inputRect.left - parentRect!.left + inputRect.width;
+      spaceOnRight = parentRect!.width - (inputRect.right - parentRect!.left);
+    } else {
+      spaceOnLeft = inputRect.right;
+      spaceOnRight = window.innerWidth - inputRect.left;
+    }
+    const showRight =
+      typeof popupHPosition !== "undefined"
+        ? popupHPosition === "left"
+        : spaceOnRight > popupWidth && spaceOnLeft < popupWidth;
+    // const showOnLeft =
     if (popupParent) {
       const parentRect = popupParent.getBoundingClientRect();
-      if (locale.rtl) {
-        const spaceOnLeft = inputRect.left - parentRect.left + inputRect.width;
-        if (spaceOnLeft >= popupWidth) {
-          right = parentRect.right - inputRect.right;
-        } else {
-          left = inputRect.left - parentRect.left;
-        }
+      //const spaceOnLeft = inputRect.left - parentRect.left + inputRect.width;
+      if (!showRight) {
+        right = parentRect.right - inputRect.right;
       } else {
-        const spaceOnRight = parentRect.right - inputRect.left;
-        if (spaceOnRight >= popupWidth) {
-          left = inputRect.left - parentRect.left;
-        } else {
-          right = parentRect.right - inputRect.right;
-        }
+        left = inputRect.left - parentRect.left;
       }
     } else {
-      if (locale.rtl) {
-        const spaceOnLeft = inputRect.right;
-        if (spaceOnLeft >= popupWidth) {
-          right = document.documentElement.clientWidth - inputRect.right;
-        } else {
-          left = inputRect.left + scrollLeft;
-        }
+      //const spaceOnLeft = inputRect.right;
+      if (!showRight) {
+        right = document.documentElement.clientWidth - inputRect.right;
       } else {
-        const spaceOnRight = window.innerWidth - inputRect.left;
-        if (spaceOnRight >= popupWidth) {
-          left = inputRect.left + scrollLeft;
-        } else {
-          right = document.documentElement.clientWidth - inputRect.right;
-        }
+        left = inputRect.left + scrollLeft;
       }
     }
 

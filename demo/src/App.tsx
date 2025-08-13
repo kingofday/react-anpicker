@@ -53,11 +53,12 @@ function App() {
         >
           <h1 className="title">فارسی</h1>
           <div style={{ display:"flex",justifyContent:"flex-end" }}>
-            <AnPicker
+            <CustomDT
               value={date3}
               onChange={handleChange3}
-              showSidebar={true}
-              popupParentRef={parentRef}
+              parentRef={parentRef}
+              popupVPosition="top"
+              
             />
           </div>
           <div style={{ height: 600 }}></div>

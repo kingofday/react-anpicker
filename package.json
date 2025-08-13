@@ -1,6 +1,6 @@
 {
   "name": "react-anpicker",
-  "version": "19.1.4",
+  "version": "19.1.5",
   "private": false,
   "license": "MIT",
   "main": "./dist/cjs/index.js",
